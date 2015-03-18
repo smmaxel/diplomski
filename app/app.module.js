@@ -4,6 +4,7 @@
 
     angular.module('myapp', [
         'ngRoute',
+        'angular-loading-bar',
         'ui.bootstrap'
     ]);
 
