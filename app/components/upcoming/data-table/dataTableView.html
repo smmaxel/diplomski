@@ -6,13 +6,13 @@
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             </span>
-            <input type="text" class="form-control" placeholder="Search for..." ng-model="searchKeyword">
+            <input type="text" class="form-control" placeholder="Search for..." ng-model="searchKeyword" ng-model-options="{debounce: {'default': 1500, 'blur': 0}}">
         </div>
 
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th ng-click="orderByField = 'name'; reverseSort = !reverseSort">
+                    <th ng-click="orderByField = 'name'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
                             Movie
                             <span ng-show="orderByField == 'name'" class="tableHeadGlyphiconPosition">
                                 <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
