@@ -1,0 +1,17 @@
+/* Additional set of styles*/
+
+
+/* Search field position for DataTable */
+.searchDataTablePosition {
+    width: 250px;
+    margin: 0 0 10px 0;
+    left: calc(100% - 250px);
+}
+
+.pointerHand {
+    cursor: pointer;
+}
+
+.tableHeadGlyphiconPosition {
+    margin-left: 5px;
+}
