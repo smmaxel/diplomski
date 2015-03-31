@@ -15,3 +15,10 @@
 .tableHeadGlyphiconPosition {
     margin-left: 5px;
 }
+
+
+/* Drop down list on navigation bar fix*/
+.dropDownFix {
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+}
