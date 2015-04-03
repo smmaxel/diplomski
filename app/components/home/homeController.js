@@ -22,6 +22,16 @@
             $scope.addSlide();
         }
 
+
+        $scope.data = {
+            movieDescription: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?',
+            upcomingDescription: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?',
+            aboutDescription: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?'
+        }
+
+
+        $scope.myHTML = 'I am an <code>HTML</code>string with ' + '<a href="#">links!</a> and other <em>stuff</em>';
+
     }
 
 }());
