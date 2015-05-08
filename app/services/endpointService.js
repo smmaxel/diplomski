@@ -12,17 +12,14 @@
         /**
          * Used for getting data from server
          * @param urlPath
-         * @param requestObject
-         * @returns {d.promise|promise|m.ready.promise|qFactory.Deferred.promise}
+         * @returns {promise}
          */
-        function getServerRequest(urlPath, requestObject) {
-
+        function getServerRequest(urlPath) {
             $log.debug('endpointService -> getServerRequest');
 
             var deferred = $q.defer();
 
-            var path = urlPath ? urlPath : '';
-            var url = '/' + path + encodeURIComponent(JSON.stringify(requestObject));
+            var url = '/api/' + urlPath;
 
             $http({
                 method: 'GET',
@@ -46,16 +43,14 @@
          * Used for posting data to server
          * @param urlPath
          * @param requestObject
-         * @returns {d.promise|promise|m.ready.promise|qFactory.Deferred.promise}
+         * @returns {promise}
          */
         function postServerRequest(urlPath, requestObject) {
-
             $log.debug('endpointService -> postServerRequest');
 
             var deferred = $q.defer();
 
-            var path = urlPath ? urlPath : '';
-            var url = '/' + path;
+            var url = '/api/' + urlPath;
 
             $http({
                 method: 'POST',
@@ -73,13 +68,77 @@
                 });
 
             return deferred.promise;
+        }
 
+
+        /**
+         * Used for updating data on the server
+         * @param urlPath
+         * @param requestObject
+         * @returns {promise}
+         */
+        function putServerRequest(urlPath, requestObject) {
+            $log.debug('endpointService -> postServerRequest');
+
+            var deferred = $q.defer();
+
+            var url = '/api/' + urlPath;
+
+            $http({
+                method: 'PUT',
+                url: url,
+                data: JSON.stringify(requestObject),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function() {
+                    deferred.reject('postServerRequest : Error!');
+                });
+
+            return deferred.promise;
+        }
+
+
+        /**
+         * Used for deleting data from the server
+         * @param urlPath
+         * @param requestObject
+         * @returns {promise}
+         */
+        function deleteServerRequest(urlPath) {
+            $log.debug('endpointService -> postServerRequest');
+
+            var deferred = $q.defer();
+
+            var url = '/api/' + urlPath;
+
+            $http({
+                method: 'DELETE',
+                url: url,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .success(function(data) {
+                    deferred.resolve(data);
+                })
+                .error(function() {
+                    deferred.reject('postServerRequest : Error!');
+                });
+
+            return deferred.promise;
         }
 
 
         return {
             getServerRequest: getServerRequest,
-            postServerRequest: postServerRequest
+            postServerRequest: postServerRequest,
+            putServerRequest: putServerRequest,
+            deleteServerRequest: deleteServerRequest
         }
 
     }
