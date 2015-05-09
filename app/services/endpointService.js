@@ -19,7 +19,7 @@
 
             var deferred = $q.defer();
 
-            var url = '/api/' + urlPath;
+            var url = 'api/' + urlPath; // TODO: return / ifront of api ('/api/')
 
             $http({
                 method: 'GET',

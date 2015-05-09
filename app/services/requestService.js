@@ -78,6 +78,16 @@
             return endpointService.deleteServerRequest(urlPath);
         }
 
+
+        return {
+            getMovies: getMovies,
+            getUpcoming: getUpcoming,
+            getUsers: getUsers,
+            addUser: addUser,
+            updateUser: updateUser,
+            deleteUser: deleteUser
+        }
+
     }
 
 }());

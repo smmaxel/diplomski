@@ -8,6 +8,7 @@
         'angular-loading-bar',
         'ui.bootstrap'
     ])
+
     .config(function($logProvider){
         $logProvider.debugEnabled(true);
     });
