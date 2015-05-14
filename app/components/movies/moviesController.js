@@ -12,9 +12,9 @@
             }
         });
 
-    moviesController.$inject = ['$scope', '$log', 'requestService'];
+    moviesController.$inject = ['$scope', '$log', '$modal', 'requestService'];
 
-    function moviesController($scope, $log, requestService) {
+    function moviesController($scope, $log, $modal, requestService) {
 
         $scope.movies = [];
         $scope.totalItems = 0;
@@ -36,6 +36,21 @@
                 $log.debug('getMovies error');
             }
         );
+
+        $scope.open = function (movie) {
+            $modal.open({
+                animation: true,
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                size: 'lg',
+                resolve: {
+                    movie: function () {
+                        return movie;
+                    }
+                }
+            });
+
+        };
 
     }
 

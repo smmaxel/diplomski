@@ -22,3 +22,21 @@
     margin-top: 4px !important;
     margin-bottom: 4px !important;
 }
+
+
+/* Fix for modal backdrop*/
+.modal-backdrop {
+   /* bottom: 0;*/
+    width: 9999px;
+    height: 9999px;
+}
+
+.modal {
+    top: 150px;
+}
+
+
+/* Pointer fix for images on Movies page */
+.noHand {
+    cursor: default;
+}

@@ -20,7 +20,7 @@
     <div ng-repeat="movie in movies | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage">
         <div class="row">
             <div class="col-md-7">
-                <a href="portfolio-item.html">
+                <a class="noHand" href="">
                     <img class="img-responsive img-hover" ng-src="{{ movie.img }}" alt="">
                 </a>
             </div>
@@ -28,7 +28,7 @@
                 <h3>{{ movie.heading }}</h3>
                 <h4>{{ movie.subheading }}</h4>
                 <p>{{ movie.description }}</p>
-                <a class="btn btn-primary" href="portfolio-item.html">View Movie</i></a>
+                <a class="btn btn-primary" ng-click="open(movie);">View Movie</i></a>
             </div>
         </div>
 
@@ -36,6 +36,23 @@
 
     </div>
     <!-- /.row -->
+
+    <!-- Modal Template-->
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{movieName}}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" ng-src="{{trustSrc(movieLink)}}" allowfullscreen="true"></iframe>
+            </div>
+            </div>
+        </div>
+        <!--<div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>-->
+    </script>
 
     <br>
 
