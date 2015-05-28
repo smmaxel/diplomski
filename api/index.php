@@ -80,13 +80,18 @@
     function addUser() {
         $request = Slim::getInstance()->request();
         $user = json_decode($request->getBody());
-        $sql = "INSERT INTO user (name, last_name, etc) VALUES (:name, :last_name, :etc)";
+        $sql = "INSERT INTO users (id, name, username, password, email, notes, occupation, gender, birthday) VALUES (NULL, :id, :name, :username, :password, :email, :notes, :occupation, :gender, :birthday)";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
             $stmt->bindParam("name", $user->name);
-            $stmt->bindParam("last_name", $user->last_name);
-            $stmt->bindParam("etc", $user->etc);
+            $stmt->bindParam("username", $user->username);
+            $stmt->bindParam("password", $user->password);
+            $stmt->bindParam("email", $user->email);
+            $stmt->bindParam("notes", $user->notes);
+            $stmt->bindParam("occupation", $user->occupation);
+            $stmt->bindParam("gender", $user->gender);
+            $stmt->bindParam("birthday", $user->birthday);
             $stmt->execute();
             $user->id = $db->lastInsertId();
             $db = null;
@@ -106,14 +111,19 @@
     function updateUser($id) {
         $request = Slim::getInstance()->request();
         $user = json_decode($request->getBody());
-        $sql = "UPDATE user SET name=:name, last_name=:last_name, etc=:etc WHERE id=:id";
+        $sql = "UPDATE users SET name=:name, username=:username, password=:password, email=:email, notes=:notes, occupation=:occupation, gender=:gender, birthday=:birthday WHERE id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
-            $stmt->bindParam("name", $user->name);
-            $stmt->bindParam("last_name", $user->last_name);
-            $stmt->bindParam("etc", $user->etc);
             $stmt->bindParam("id", $id);
+            $stmt->bindParam("name", $user->name);
+            $stmt->bindParam("username", $user->username);
+            $stmt->bindParam("password", $user->password);
+            $stmt->bindParam("email", $user->email);
+            $stmt->bindParam("notes", $user->notes);
+            $stmt->bindParam("occupation", $user->occupation);
+            $stmt->bindParam("gender", $user->gender);
+            $stmt->bindParam("birthday", $user->birthday);
             $stmt->execute();
             $db = null;
             echo json_encode($user);
@@ -130,7 +140,7 @@
      * @param $id
      */
     function deleteUser($id) {
-        $sql = "DELETE FROM user WHERE id=:id";
+        $sql = "DELETE FROM users WHERE id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);

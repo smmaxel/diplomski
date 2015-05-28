@@ -7,43 +7,62 @@
         $routeProvider
 
             .otherwise({
-                redirectTo: '/home'
+                redirectTo: '/login'
             })
 
             .when('/home', {
                 templateUrl: 'app/components/home/homeView.html',
-                controller: 'homeController'/*,
+                controller: 'homeController',
                 resolve: {
                     auth: function (AuthService) {
                         AuthService.checkAuth();
-                }*/
+                    }
+                }
             })
             .when('/movies', {
                 templateUrl: 'app/components/movies/moviesView.html',
-                controller: 'moviesController'/*,
-                 resolve: {
-                 auth: function (AuthService) {
-                 AuthService.checkAuth();
-                 }*/
+                controller: 'moviesController',
+                resolve: {
+                    auth: function (AuthService) {
+                        AuthService.checkAuth();
+                    }
+                }
             })
             .when('/upcoming', {
                 templateUrl: 'app/components/upcoming/upcomingView.html',
-                controller: 'upcomingController'/*,
-                 resolve: {
-                 auth: function (AuthService) {
-                 AuthService.checkAuth();
-                 }*/
+                controller: 'upcomingController',
+                resolve: {
+                    auth: function (AuthService) {
+                        AuthService.checkAuth();
+                    }
+                }
             })
             .when('/about', {
                 templateUrl: 'app/components/about/aboutView.html',
-                controller: 'aboutController'/*,
-                 resolve: {
-                 auth: function (AuthService) {
-                 AuthService.checkAuth();
-                 }*/
+                controller: 'aboutController',
+                resolve: {
+                    auth: function (AuthService) {
+                        AuthService.checkAuth();
+                    }
+                }
             })
-            .when('/404', {
-                templateUrl: 'app/shared/404.html'
+            .when('/login', {
+                templateUrl: 'app/components/login/login.html',
+                controller: 'loginController',
+                resolve: {
+                    auth: function (AuthService) {
+                        AuthService.checkAuth();
+                    }
+                }
+            })
+            .when('/register', {
+                templateUrl: 'app/components/register/register.html',
+                controller: 'registerController',
+                resolve: {
+                    auth: function (AuthService) {
+                        AuthService.checkAuth();
+                    }
+                }
             });
 
 

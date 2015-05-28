@@ -12,7 +12,7 @@
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right" ng-show="navigation">
                 <li>
                     <a href="#/movies">Movies</a>
                 </li>
@@ -26,23 +26,42 @@
                     <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="">Profile Info</a>
+                            <a href="">{{ username }}</a>
                         </li>
-                        <li>
+                        <!--<li>
                             <a href="">Settings</a>
-                        </li>
+                        </li>-->
                         <li>
-                            <a href="">Edit Profile</a>
+                            <a href="" ng-click="open()">Edit Profile</a>
                         </li>
                         <li role="presentation" class="divider dropDownFix"></li>
                         <li>
-                            <a href="">Log Out</a>
+                            <a href="" ng-click="logout()">Log Out</a>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
+
+        <!-- Modal Template-->
+        <script type="text/ng-template" id="myNavModalContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title">{{movieName}}</h3>
+            </div>
+            <div class="modal-body">
+                {{movieLink}}
+                <!--<div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" ng-src="{{movieLink}}" allowfullscreen="true"></iframe>
+                </div>-->
+            </div>
+            </div>
+            <!--<div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok()">OK</button>
+                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            </div>-->
+        </script>
+
     </div>
     <!-- /.container -->
 </nav>

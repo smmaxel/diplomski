@@ -8,6 +8,9 @@
         'angular-loading-bar',
         'ui.bootstrap'
     ])
+    .constant('CONFIG', {
+        user : {}
+    })
 
     .config(function($logProvider){
         $logProvider.debugEnabled(true);
