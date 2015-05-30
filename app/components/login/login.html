@@ -1,0 +1,41 @@
+<!-- Page Content -->
+<div class="container loginBackgroundImage">
+
+    <div class="panel panel-default loginPanel">
+
+        <form class="form-horizontal" name="employeeForm">
+
+            <fieldset>
+                <legend class="loginPanelHeading">Login</legend>
+                <br />
+
+                <div class="form-group">
+                    <div class="col-sm-6 loginPanelFields">
+                        <input type="text" name="username" class="form-control" ng-model="username" ng-required="true"
+                               placeholder="Enter Username" autocomplete="off" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6 loginPanelFields">
+                        <input type="password" name="password" class="form-control" ng-model="password" ng-required="true"
+                               placeholder="Enter Password" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 loginPanelFields">
+                        <input type="submit" class="btn btn-primary loginSubmit" value="Login" ng-click="login()" />
+                    </div>
+                    <div class="loginRegisterText">
+                        <a href="#/register" >Need to register?</a>
+                    </div>
+                </div>
+            </fieldset>
+
+        </form>
+
+    </div>
+
+</div>
+<!-- /.container -->

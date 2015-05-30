@@ -9,7 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Modern Business - Start Bootstrap Template</title>
+    <title>Movie Database</title>
+    <link href="data/movie_favicon.png" rel="shortcut icon">
 
     <!-- Bootstrap Core CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -36,8 +37,7 @@
 <body>
 
     <!-- Navigation -->
-    <div ng-include src="'app/shared/navigation/navigation.html'"></div>
-
+    <div ng-include src="'app/shared/navigation/navigation.html'" ng-controller="navigationController"></div>
 
     <!-- Carousel & Content-->
     <div ng-view>
@@ -48,29 +48,34 @@
     <!-- jQuery -->
     <script src="assets/js/jquery.js"></script>
 
-    <!-- Angular JS -->
+    <!-- Bootstrap Core JavaScript -->
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <!-- Angular JS Modules -->
     <script src="assets/js/angular.js"></script>
     <script src="assets/js/angular-route.js"></script>
+    <script src="assets/js/angular-sanitize.js"></script>
     <script src="assets/lib/angular-loading-bar/loading-bar.js"></script>
     <script src="assets/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
 
+    <!-- Angular JS Controllers and Services-->
     <script src="app/app.module.js"></script>
     <script src="app/app.routes.js"></script>
+    <script src="app/authService.js"></script>
+    <script src="app/services/requestService.js"></script>
+    <script src="app/services/endpointService.js"></script>
+    <script src="app/shared/navigation/navigationController.js"></script>
+    <script src="app/shared/navigation/modalNavController.js"></script>
+    <script src="app/components/register/registerController.js"></script>
+    <script src="app/components/login/loginController.js"></script>
     <script src="app/components/home/homeController.js"></script>
     <script src="app/components/about/aboutController.js"></script>
+    <script src="app/components/movies/modalController.js"></script>
     <script src="app/components/movies/moviesController.js"></script>
     <script src="app/components/upcoming/upcomingController.js"></script>
     <script src="app/components/upcoming/data-table/dataTableDirective.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="assets/js/bootstrap.min.js"></script>
 
-    <!-- Script to Activate the Carousel -->
-    <script>
-    $('.carousel').carousel({
-        interval: 5000 //changes the speed
-    })
-    </script>
 
 </body>
 

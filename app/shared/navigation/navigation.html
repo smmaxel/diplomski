@@ -8,77 +8,60 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">Start Bootstrap</a>
+            <a class="navbar-brand" href="#/home">Movie Database</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right" ng-show="navigation">
                 <li>
-                    <a href="app/shared/about.html">About</a>
-                </li>
-                <li>
-                    <a href="app/shared/services.html">Services</a>
+                    <a href="#/movies">Movies</a>
                 </li>
                 <li>
-                    <a href="app/shared/contact.html">Contact</a>
+                    <a href="#/upcoming">Upcoming</a>
+                </li>
+                <li>
+                    <a href="#/about">About</a>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Portfolio <b class="caret"></b></a>
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="app/shared/portfolio-1-col.html">1 Column Portfolio</a>
+                            <a href="">{{ username }}</a>
                         </li>
+                        <!--<li>
+                            <a href="">Settings</a>
+                        </li>-->
                         <li>
-                            <a href="app/shared/portfolio-2-col.html">2 Column Portfolio</a>
+                            <a href="" ng-click="open()">Edit Profile</a>
                         </li>
+                        <li role="presentation" class="divider dropDownFix"></li>
                         <li>
-                            <a href="app/shared/portfolio-3-col.html">3 Column Portfolio</a>
-                        </li>
-                        <li>
-                            <a href="app/shared/portfolio-4-col.html">4 Column Portfolio</a>
-                        </li>
-                        <li>
-                            <a href="app/shared/portfolio-item.html">Single Portfolio Item</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="app/shared/blog-home-1.html">Blog Home 1</a>
-                        </li>
-                        <li>
-                            <a href="app/shared/blog-home-2.html">Blog Home 2</a>
-                        </li>
-                        <li>
-                            <a href="app/shared/blog-post.html">Blog Post</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other Pages <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="app/shared/full-width.html">Full Width Page</a>
-                        </li>
-                        <li>
-                            <a href="app/shared/sidebar.html">Sidebar Page</a>
-                        </li>
-                        <li>
-                            <a href="app/shared/faq.html">FAQ</a>
-                        </li>
-                        <li>
-                            <a href="app/shared/404.html">404</a>
-                        </li>
-                        <li>
-                            <a href="app/shared/pricing.html">Pricing Table</a>
+                            <a href="" ng-click="logout()">Log Out</a>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
+
+        <!-- Modal Template-->
+        <script type="text/ng-template" id="myNavModalContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title">{{movieName}}</h3>
+            </div>
+            <div class="modal-body">
+                {{movieLink}}
+                <!--<div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" ng-src="{{movieLink}}" allowfullscreen="true"></iframe>
+                </div>-->
+            </div>
+            </div>
+            <!--<div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok()">OK</button>
+                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            </div>-->
+        </script>
+
     </div>
     <!-- /.container -->
 </nav>

@@ -16,8 +16,6 @@
 
     function upcomingController($scope) {
 
-        //$scope.
-
     }
 
 }());
