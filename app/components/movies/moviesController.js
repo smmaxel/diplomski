@@ -12,9 +12,9 @@
             }
         });
 
-    moviesController.$inject = ['$scope', '$log', '$modal', 'requestService'];
+    moviesController.$inject = ['$scope', '$log', '$location', '$modal', 'requestService'];
 
-    function moviesController($scope, $log, $modal, requestService) {
+    function moviesController($scope, $log, $location, $modal, requestService) {
 
         $scope.movies = [];
         $scope.totalItems = 0;
@@ -51,6 +51,14 @@
             });
 
         };
+
+
+        // Redirect to movieComments page with appropriate movie id
+        $scope.movieComments = function(id) {
+            $location.path('/movieComments/' + id);
+        };
+
+        $scope.rating = 3;
 
     }
 

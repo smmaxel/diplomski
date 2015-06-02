@@ -78,9 +78,9 @@
      * Method: POST
      */
     function addUser() {
-        $request = Slim::getInstance()->request();
+        $request = \Slim\Slim::getInstance()->request();
         $user = json_decode($request->getBody());
-        $sql = "INSERT INTO users (id, name, username, password, email, notes, occupation, gender, birthday) VALUES (NULL, :id, :name, :username, :password, :email, :notes, :occupation, :gender, :birthday)";
+        $sql = "INSERT INTO users (id, name, username, password, email, notes, occupation, gender, birthday) VALUES (NULL, :name, :username, :password, :email, :notes, :occupation, :gender, :birthday)";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -109,7 +109,7 @@
      * @param $id
      */
     function updateUser($id) {
-        $request = Slim::getInstance()->request();
+        $request = \Slim\Slim::getInstance()->request();
         $user = json_decode($request->getBody());
         $sql = "UPDATE users SET name=:name, username=:username, password=:password, email=:email, notes=:notes, occupation=:occupation, gender=:gender, birthday=:birthday WHERE id=:id";
         try {
