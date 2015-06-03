@@ -6,6 +6,7 @@
     $app = new \Slim\Slim();
 
     $app->get('/movies', 'getMovies');
+    $app->get('/movie/:id', 'getMovie');
     $app->get('/upcoming', 'getUpcoming');
     $app->get('/users', 'getUsers');
     $app->post('/user', 'addUser');
@@ -28,6 +29,26 @@
             $movies = $stmt->fetchAll(PDO::FETCH_OBJ);
             $db = null;
             echo '{"movies": ' . json_encode($movies) . '}';
+        } catch (PDOException $e) {
+            echo '{"error": {"text":' . $e->getMessage() . '}}';
+        }
+    }
+
+    /**
+     * Get the specific Move Data from the database based on ID
+     * http://www.yourwebsite.com/api/movie/id
+     * @param $id
+     */
+    function getMovie($id) {
+        $sql = "SELECT * FROM movies WHERE id=:id";
+        try {
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam("id", $id);
+            $stmt->execute();
+            $movie = $stmt->fetchObject();
+            $db = null;
+            echo '{"movie": ' . json_encode($movie) . '}';
         } catch (PDOException $e) {
             echo '{"error": {"text":' . $e->getMessage() . '}}';
         }
