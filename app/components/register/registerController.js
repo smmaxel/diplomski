@@ -16,6 +16,10 @@
         ];
 
 
+        $scope.submitForm = function() {
+            console.log('submit form initiated');
+        };
+
         $scope.register = function() {
 
 
@@ -62,7 +66,7 @@
                  $stmt->bindParam("birthday", $user->birthday);
              */
 
-            requestService.updateUser(2, data).then(
+/*            requestService.updateUser(2, data).then(
 
                 // success function
                 function(data) {
@@ -73,7 +77,7 @@
                 function() {
                     console.log('error while trying to POST the data');
                 }
-            );
+            );*/
 
         };
 
