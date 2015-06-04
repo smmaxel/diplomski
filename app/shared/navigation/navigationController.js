@@ -8,9 +8,9 @@
 
     function navigationController($scope, $log, $location, $modal, CONFIG) {
 
-        $scope.navigation = false;
+        $scope.navigation = true; // display the navigatin pages (Movies, Upcoming etc.)
 
-        $scope.$on('$routeChangeStart', function() {
+        /*$scope.$on('$routeChangeStart', function() {
 
             if (CONFIG.user.name) {
                 $scope.navigation = true;
@@ -19,7 +19,7 @@
                 $scope.navigation = false;
                 $scope.username = '';
             }
-        });
+        });*/
 
         $scope.logout = function() {
             CONFIG.user = {};

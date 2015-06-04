@@ -14,12 +14,12 @@
                     var user = CONFIG.user;
                     if (user.name && user.username && user.password) {
                         if ($location.path() == '/login' || $location.path() == '/register') {
-                            $location.path('/home');
+                            //$location.path('/home');
                         } else {
-                            $location.path();
+                            //$location.path();
                         }
                     } else {
-                        $location.path('/login');
+                        //$location.path('/login');
                     }
                 }
             }

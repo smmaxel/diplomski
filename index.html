@@ -40,7 +40,7 @@
     <div ng-include src="'app/shared/navigation/navigation.html'" ng-controller="navigationController"></div>
 
     <!-- Carousel & Content-->
-    <div ng-view>
+    <div ng-view autoscroll="true">
 
     </div>
     <!-- /.Carousel & Content-->
@@ -72,6 +72,7 @@
     <script src="app/components/about/aboutController.js"></script>
     <script src="app/components/movies/modalController.js"></script>
     <script src="app/components/movies/moviesController.js"></script>
+    <script src="app/components/movie-comments/movieCommentsController.js"></script>
     <script src="app/components/upcoming/upcomingController.js"></script>
     <script src="app/components/upcoming/data-table/dataTableDirective.js"></script>
 

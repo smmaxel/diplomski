@@ -21,6 +21,18 @@
 
 
         /**
+         * Used for obtaining particular movie by its ID
+         * @param id
+         * @returns {promise}
+         */
+        function getMovieByID(id) {
+            $log.debug('requestService -> getMovieByID');
+            var urlPath = 'movie/' + id;
+            return endpointService.getServerRequest(urlPath);
+        }
+
+
+        /**
          * Used for obtaining upcoming data from the server
          * @returns {promise}
          */
@@ -81,6 +93,7 @@
 
         return {
             getMovies: getMovies,
+            getMovieByID: getMovieByID,
             getUpcoming: getUpcoming,
             getUsers: getUsers,
             addUser: addUser,

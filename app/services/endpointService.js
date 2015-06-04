@@ -50,7 +50,7 @@
 
             var deferred = $q.defer();
 
-            var url = '/api/' + urlPath;
+            var url = '/diplomski/api/' + urlPath;
 
             $http({
                 method: 'POST',
