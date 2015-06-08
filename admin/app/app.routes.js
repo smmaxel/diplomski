@@ -25,6 +25,18 @@
             .when('/upcoming', {
                 templateUrl: 'app/components/upcoming/upcomingView.html',
                 controller: 'upcomingController'
+            })
+            .when('/users', {
+                templateUrl: 'app/components/users/usersView.html',
+                controller: 'usersController'
+            })
+            .when('/comments', {
+                templateUrl: 'app/components/comments/commentsView.html',
+                controller: 'commentsController'
+            })
+            .when('/ratings', {
+                templateUrl: 'app/components/ratings/ratingsView.html',
+                controller: 'ratingsController'
             });
             /*.when('/movies', {
                 templateUrl: 'app/components/movies/moviesView.html',
