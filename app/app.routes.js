@@ -7,7 +7,7 @@
         $routeProvider
 
             .otherwise({
-                redirectTo: '/login'
+                redirectTo: '/home'
             })
 
             .when('/home', {
@@ -22,6 +22,15 @@
             .when('/movies', {
                 templateUrl: 'app/components/movies/moviesView.html',
                 controller: 'moviesController',
+                resolve: {
+                    auth: function (AuthService) {
+                        AuthService.checkAuth();
+                    }
+                }
+            })
+            .when('/movieComments/:movieId', {
+                templateUrl: 'app/components/movie-comments/movieComments.html',
+                controller: 'movieCommentsController',
                 resolve: {
                     auth: function (AuthService) {
                         AuthService.checkAuth();

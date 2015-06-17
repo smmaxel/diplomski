@@ -1,0 +1,118 @@
+<!-- Header Carousel -->
+<header id="myCarousel" class="carousel slide">
+    <div>
+        <carousel interval="myInterval">
+            <slide ng-repeat="slide in slides | reverse |limitTo:5" active="slide.active">
+                <img ng-src="{{slide.img}}" style="margin:auto;">
+                <div class="carousel-caption">
+                    <p>{{slide.heading}}</p>
+                </div>
+            </slide>
+        </carousel>
+    </div>
+</header>
+
+<!-- Page Content -->
+<div class="container">
+
+    <!-- Marketing Icons Section -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Welcome to Movie Database
+            </h1>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4><i class="fa fa-fw fa-video-camera"></i> Movies</h4>
+                </div>
+                <div class="panel-body">
+                    <p ng-bind-html="data.movieDescription"></p>
+                    <a href="#/movies" class="btn btn-default">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4><i class="fa fa-fw fa-calendar"></i> Upcoming</h4>
+                </div>
+                <div class="panel-body">
+                    <p ng-bind-html="data.upcomingDescription"></p>
+                    <a href="#/upcoming" class="btn btn-default">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4><i class="fa fa-fw fa-info-circle"></i> About Us</h4>
+                </div>
+                <div class="panel-body">
+                    <p ng-bind-html="data.aboutDescription"></p>
+                    <a href="#/about" class="btn btn-default">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Portfolio Section -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">Recently Added Movies</h2>
+        </div>
+        <div class="col-md-4 col-sm-6" ng-repeat="movie in movies | limitTo:6">
+            <a href="#/movies">
+                <img class="img-responsive img-portfolio img-hover" ng-src="{{movie.img}}" alt="">
+            </a>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Features Section -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">Movie Database Information</h2>
+        </div>
+        <div class="col-md-6">
+            <p>The Movie Database includes:</p>
+            <ul>
+                <li><strong>IMDB data</strong>
+                </li>
+                <li>Movie names</li>
+                <li>Posters</li>
+                <li>Descriptions</li>
+                <li>Links</li>
+            </ul>
+            <!--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, omnis doloremque non cum id reprehenderit, quisquam totam aspernatur tempora minima unde aliquid ea culpa sunt. Reiciendis quia dolorum ducimus unde.</p>-->
+            <p>All data used on this site is property of Image Movie Database (IMDB) and as such it can't be referenced and/or used in commercial purposes. </p>
+        </div>
+        <div class="col-md-3">
+            <img class="img-responsive" ng-src="data/imdb_logo.jpg" alt="">
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <hr>
+
+    <!-- Call to Action Section -->
+    <div class="well">
+        <div class="row">
+            <div class="col-md-8">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias, expedita, saepe, vero rerum deleniti beatae veniam harum neque nemo praesentium cum alias asperiores commodi.</p>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-lg btn-default btn-block" href="#">Call to Action</a>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Footer -->
+    <div ng-include src="'app/shared/footer/footer.html'"></div>
+
+</div>
+<!-- /.container -->
