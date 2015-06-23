@@ -33,7 +33,6 @@
          * @returns {*}
          */
         function destroy(key) {
-            $http.post('data/destroy_session.php'); // TODO: change the path
             return sessionStorage.removeItem(key);
         }
 

@@ -4,50 +4,102 @@
 
     angular.module('myapp').factory('loginService', loginService);
 
-    loginService.$inject = ['$log', 'sessionService'];
+    loginService.$inject = ['$http', '$q', '$log', 'sessionService'];
 
-    function loginService($log, sessionService) {
+    function loginService($http, $q, $log, sessionService) {
 
         /**
          * Check if user is registered and initiate the session
          * @param data
+         * @returns {d.promise|promise|qFactory.Deferred.promise|m.ready.promise}
          */
         function login(data) {
-            // requestService
-            var $promise = $http.post('data/user.php', data);
-            $promise.then(function(msg) {
-                var uid = msg.data;
-                if (uid) {
-                    // use the sessionService to set the value of uid
-                    $log.debug('loginService -> login success', uid);
-                    sessionService.set('uid', uid);
-                } else {
-                    // give the error notification to the user
-                    $log.debug('wrong initials or something');
+            $log.debug('loginService -> login');
+
+            var deferred = $q.defer();
+
+            var url = 'app/data/user.php';
+
+            $http({
+                method: 'POST',
+                url: url,
+                data: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            });
+            })
+                .success(function(data) {
+                    sessionService.set('uid', data.uid);
+                    deferred.resolve(data);
+                })
+                .error(function() {
+                    deferred.reject('postServerRequest: Error!');
+                });
+
+            return deferred.promise;
+
         }
 
         /**
          * Destroy the session if it exists
+         * @returns {d.promise|promise|qFactory.Deferred.promise|m.ready.promise}
          */
         function logout() {
-            // call the sessionService to destroy the uid
             $log.debug('loginService -> logout');
-            sessionService.destroy('uid');
-            // update the navigation and other necessary  pages
+
+            var deferred = $q.defer();
+
+            var url = 'data/destroy_session.php';
+
+            $http({
+                method: 'POST',
+                url: url,
+                data: '',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .success(function(data) {
+                    sessionService.destroy('uid');
+                    deferred.resolve(data);
+                })
+                .error(function() {
+                    deferred.reject('postServerRequest: Error!');
+                });
+
+            return deferred.promise;
+
         }
 
         /**
          * Checks if the current user is logged in
-         * @returns {*}
+         * @returns {d.promise|promise|qFactory.Deferred.promise|m.ready.promise}
          */
         function isLogged() {
-            // check if the user is logged in
             $log.debug('loginService -> isLogged');
-            return $http.post('data/check_session.php');
 
-            // this will be used before sending data to the backend
+            var deferred = $q.defer();
+
+            var url = 'data/check_session.php';
+
+            $http({
+                method: 'POST',
+                url: url,
+                data: '',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .success(function(data) {
+                    sessionStorage.get('uid'); // TODO: see how this should be passed!!!!!
+                    deferred.resolve(data);
+                })
+                .error(function() {
+                    deferred.reject('postServerRequest: Error!');
+                });
+
+            return deferred.promise;
+
         }
 
 

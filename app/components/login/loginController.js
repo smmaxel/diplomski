@@ -4,13 +4,36 @@
 
     angular.module('myapp').controller('loginController', loginController);
 
-    loginController.$inject = ['$scope', '$log', '$location', 'requestService', 'CONFIG'];
+    loginController.$inject = ['$scope', '$log', '$location', 'requestService', 'loginService', 'CONFIG'];
 
-    function loginController($scope, $log, $location, requestService, CONFIG) {
+    function loginController($scope, $log, $location, requestService, loginService, CONFIG) {
 
         var users = [];
 
-        requestService.getUsers().then(
+
+        var objekat = JSON.stringify({
+            username: 'smmaxel',
+            password: 'Marko022'
+        });
+
+        console.log('objekat', objekat);
+
+        loginService.login(objekat).then(
+
+            // success function
+            function(data) {
+                $log.debug('logged in successfully', data);
+            },
+
+            // error function
+            function() {
+                $log.debug('failed to login');
+            }
+        );
+
+
+
+/*        requestService.getUsers().then(
 
             // success function
             function(data) {
@@ -39,7 +62,7 @@
                 }
             }
 
-        };
+        };*/
 
     }
 
