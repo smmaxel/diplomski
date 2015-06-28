@@ -49,7 +49,7 @@
 
             var deferred = $q.defer();
 
-            var url = 'data/destroy_session.php';
+            var url = 'app/data/destroy_session.php';
 
             $http({
                 method: 'POST',
@@ -80,7 +80,7 @@
 
             var deferred = $q.defer();
 
-            var url = 'data/check_session.php';
+            var url = 'app/data/check_session.php';
 
             $http({
                 method: 'POST',
@@ -91,8 +91,10 @@
                 }
             })
                 .success(function(data) {
-                    sessionStorage.get('uid'); // TODO: see how this should be passed!!!!!
-                    deferred.resolve(data);
+                    deferred.resolve({
+                        user: data,
+                        storage: sessionService.get('uid')
+                    });
                 })
                 .error(function() {
                     deferred.reject('postServerRequest: Error!');

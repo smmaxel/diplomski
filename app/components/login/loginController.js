@@ -8,61 +8,60 @@
 
     function loginController($scope, $log, $location, requestService, loginService, CONFIG) {
 
-        var users = [];
 
+        // username and password
+        /*$scope.username = "";
+        $scope.password = "";*/
 
-        var objekat = JSON.stringify({
-            username: 'smmaxel',
-            password: 'Marko022'
-        });
+        // if username and password are defined than call function to check authentification
+        $scope.login = function() {
 
-        console.log('objekat', objekat);
+            if ($scope.username && $scope.password) {
 
-        loginService.login(objekat).then(
+                var payload = {
+                    username: $scope.username,
+                    password: $scope.password
+                };
 
-            // success function
-            function(data) {
-                $log.debug('logged in successfully', data);
-            },
+                console.log("payload passing: ", payload);
 
-            // error function
-            function() {
-                $log.debug('failed to login');
-            }
-        );
+                loginService.login(payload).then(
 
+                    // success function
+                    function(data) {
+                        $log.debug('logged in successfully', data);
+                    },
 
-
-/*        requestService.getUsers().then(
-
-            // success function
-            function(data) {
-                $log.debug('loginController -> users success', data);
-                users = data.users;
-            },
-
-            // error function
-            function() {
-                $log.debug('loginController -> users error');
-            }
-        );
-
-        $scope.login =  function() {
-
-            for (var i = 0, length = users.length; i < length; i++) {
-                if (users[i]) {
-                    if (users[i].username === $scope.username && users[i].password === $scope.password) {
-                        CONFIG.user = users[i];
-                        $location.path('/home');
-                    } else {
-                        if (i === length - 1) {
-                            console.log('wrong credentials');
-                        }
+                    // error function
+                    function() {
+                        $log.debug('failed to login');
                     }
-                }
+                );
             }
+        };
 
-        };*/
+
+        // if autentification is good, set sesstion and uid and "login the user"
+
+
+        // if autentification is not ok notify the user that he used wrong credentials
+
+        /*function checkIsLogged() {
+            loginService.isLogged().then(
+
+                // success function
+                function(data) {
+                    console.log('loginController success', data);
+                },
+
+                // error function
+                function() {
+                    console.log('loginController error');
+                }
+            );
+        }*/
+
+       // setTimeout(checkIsLogged, 5000);
 
     }
 
