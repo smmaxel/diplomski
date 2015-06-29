@@ -4,9 +4,9 @@
 
     angular.module('myapp').controller('navigationController', navigationController);
 
-    navigationController.$inject = ['$scope', '$log', '$location', '$modal', 'CONFIG'];
+    navigationController.$inject = ['$scope', '$log', '$location', '$modal', 'loginService', 'CONFIG'];
 
-    function navigationController($scope, $log, $location, $modal, CONFIG) {
+    function navigationController($scope, $log, $location, $modal, loginService, CONFIG) {
 
         $scope.navigation = true; // display the navigatin pages (Movies, Upcoming etc.)
 
@@ -21,10 +21,40 @@
             }
         });*/
 
+        $scope.userLogged = true;
+
         $scope.logout = function() {
-            CONFIG.user = {};
-            $location.path('/login');
+
+            loginService.logout().then(
+
+                // success function
+                function(data) {
+                    $log.debug('logged out success', data);
+                    setTimeout(checkIsLogged, 3000);
+                },
+
+                // error function
+                function() {
+                    $log.debug('logged out error');
+                }
+
+            );
         };
+
+        function checkIsLogged() {
+            loginService.isLogged().then(
+
+                // success function
+                function(data) {
+                    console.log('checkIsLogged success', data);
+                },
+
+                // error function
+                function() {
+                    console.log('checkIsLogged error');
+                }
+            );
+        }
 
 
         $scope.open = function () {
