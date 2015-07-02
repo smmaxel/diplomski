@@ -11,7 +11,91 @@
 
         <div class="row">
             <div class="col-lg-8">
+                <!-- Page Content -->
+                <div class="input-group searchDataTablePosition">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </span>
+                    <input type="text" class="form-control" placeholder="Search for..." ng-model="searchKeyword" ng-model-options="{debounce: {'default': 1500, 'blur': 0}}">
+                </div>
 
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th ng-click="orderByField = 'id'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
+                            ID
+                            <span ng-show="orderByField == 'id'" class="tableHeadGlyphiconPosition">
+                                <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </span>
+                        </th>
+                        <th ng-click="orderByField = 'heading'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
+                            Heading
+                            <span ng-show="orderByField == 'heading'" class="tableHeadGlyphiconPosition">
+                                <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </span>
+                        </th>
+                        <th ng-click="orderByField = 'subheading'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
+                            Subheading
+                            <span ng-show="orderByField == 'subheading'" class="tableHeadGlyphiconPosition">
+                                <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </span>
+                        </th>
+                        <th ng-click="orderByField = 'description'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
+                            Description
+                            <span ng-show="orderByField == 'description'" class="tableHeadGlyphiconPosition">
+                                <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </span>
+                        </th>
+                        <th ng-click="orderByField = 'storyline'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
+                            Storyline
+                            <span ng-show="orderByField == 'storyline'" class="tableHeadGlyphiconPosition">
+                                <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </span>
+                        </th>
+                        <th ng-click="orderByField = 'img'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
+                            IMG
+                            <span ng-show="orderByField == 'img'" class="tableHeadGlyphiconPosition">
+                                <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </span>
+                        </th>
+                        <th ng-click="orderByField = 'link'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
+                            Link
+                            <span ng-show="orderByField == 'link'" class="tableHeadGlyphiconPosition">
+                                <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="movies in upcomingMovies | filter: searchKeyword | orderBy:orderByField:reverseSort | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage">
+                        <td>{{movies.id}}</td>
+                        <td>{{movies.heading}}</td>
+                        <td>{{movies.subheading}}</td>
+                        <td>{{movies.description}}</td>
+                        <td>{{movies.storyline}}</td>
+                        <td>{{movies.img}}</td>
+                        <td>{{movies.link}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- /.container -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="row text-center">
+                <div class="col-lg-12">
+                    <pagination total-items="totalItems" ng-model="currentPage" max-size="5" boundary-links="true" rotate="true" items-per-page="itemsPerPage"></pagination>
+                </div>
+            </div>
+            <!-- /.row -->
             </div>
             <!-- /.col-lg-8 -->
 
