@@ -2,7 +2,7 @@
 
     'use strict';
 
-    angular.module('myapp').factory('endpointService', endpointService);
+    angular.module('admin').factory('endpointService', endpointService);
 
     endpointService.$inject = ['$http', '$q', '$log'];
 

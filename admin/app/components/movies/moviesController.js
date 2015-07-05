@@ -38,15 +38,50 @@
             }
         );
 
-
         // create specific call for obtaining single movie (when editing)
+        // TODO: refactor to use real value once edit field is clicked
+        requestService.getMovieByID('1').then(
 
+            // success function
+            function(data) {
+                $log.debug('moviesController -> getMovieByID success', data);
+            },
 
+            // error function
+            function() {
+                $log.debug('moviesController -> getMovieByID error');
+            }
+        );
 
         // create specific call for saving single movie (updating)
+        // TODO: refactor and prepare payload to be save (see example from registering user on UI side)
+        /*requestService.saveMovie(payload).then(
+
+            // success function
+            function(data) {
+                $log.debug('movieController -> saveMovie success', data);
+            },
+
+            // error function
+            function() {
+                $log.debug('movieController -> saveMovie error');
+            }
+        );*/
 
         // crate specific call for deleting single movie (deleting)
+        // TODO: refactor to use real value once the delete field is clicked
+        /*requestService.deleteMovie(id).then(
 
+            // success function
+            function(data) {
+                $log.debug('movieController -> deleteMovie success', data);
+            },
+
+            // error function
+            function() {
+                $log.debug('movieController -> deleteMovie error');
+            }
+        );*/
 
     }
 

@@ -2,7 +2,7 @@
 
     'use strict';
 
-    angular.module('myapp').factory('requestService', requestService);
+    angular.module('admin').factory('requestService', requestService);
 
     requestService.$inject = ['$log', 'endpointService'];
 
@@ -29,6 +29,26 @@
             $log.debug('requestService -> getMovieByID');
             var urlPath = 'movie/' + id;
             return endpointService.getServerRequest(urlPath);
+        }
+
+        function saveMovie(data) {
+            $log.debug('requestService -> saveMovie');
+            var urlPath = 'movie';
+            return endpointService.postServerRequest(urlPath, data);
+        }
+
+
+        function updateMovie(id, data) {
+            $log.debug('requestService -> updateMovie');
+            var urlPath = 'movie/' + id;
+            return endpointService.putServerRequest(urlPath, data);
+        }
+
+
+        function deleteMovie(id) {
+            $log.debug('requestService -> deleteMovie');
+            var urlPath = 'movie/' + id;
+            return endpointService.deleteServerRequest(urlPath);
         }
 
 
