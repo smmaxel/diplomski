@@ -4,42 +4,61 @@
 
     angular.module('myapp').controller('loginController', loginController);
 
-    loginController.$inject = ['$scope', '$log', '$location', 'requestService', 'CONFIG'];
+    loginController.$inject = ['$scope', '$log', '$location', 'requestService', 'loginService', 'CONFIG'];
 
-    function loginController($scope, $log, $location, requestService, CONFIG) {
+    function loginController($scope, $log, $location, requestService, loginService, CONFIG) {
 
-        var users = [];
 
-        requestService.getUsers().then(
+        // if username and password are defined than call function to check authentification
+        $scope.login = function() {
 
-            // success function
-            function(data) {
-                $log.debug('loginController -> users success', data);
-                users = data.users;
-            },
+            if ($scope.username && $scope.password) {
 
-            // error function
-            function() {
-                $log.debug('loginController -> users error');
-            }
-        );
+                var payload = {
+                    username: $scope.username,
+                    password: $scope.password
+                };
 
-        $scope.login =  function() {
+                /**
+                 * Calls login function to verify the user and set SESSION if it's authenticated
+                 */
+                loginService.login(payload).then(
 
-            for (var i = 0, length = users.length; i < length; i++) {
-                if (users[i]) {
-                    if (users[i].username === $scope.username && users[i].password === $scope.password) {
-                        CONFIG.user = users[i];
-                        $location.path('/home');
-                    } else {
-                        if (i === length - 1) {
-                            console.log('wrong credentials');
-                        }
+                    // success function
+                    function(data) {
+                        $log.debug('logged in successfully', data);
+                        // login the user (broadcast the event)
+
+                        // if error notify the user about wrong credentials
+
+                    },
+
+                    // error function
+                    function() {
+                        $log.debug('failed to login');
                     }
-                }
+                );
             }
-
         };
+
+        // if autentification is good, set sesstion and uid and "login the user"
+
+        // if autentification is not ok notify the user that he used wrong credentials
+
+        /*function checkIsLogged() {
+            loginService.isLogged().then(
+
+                // success function
+                function(data) {
+                    console.log('checkIsLogged success', data);
+                },
+
+                // error function
+                function() {
+                    console.log('checkIsLogged error');
+                }
+            );
+        }*/
 
     }
 
