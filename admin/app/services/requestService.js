@@ -2,7 +2,7 @@
 
     'use strict';
 
-    angular.module('myapp').factory('requestService', requestService);
+    angular.module('admin').factory('requestService', requestService);
 
     requestService.$inject = ['$log', 'endpointService'];
 
@@ -31,6 +31,26 @@
             return endpointService.getServerRequest(urlPath);
         }
 
+        function addMovie(data) {
+            $log.debug('requestService -> saveMovie');
+            var urlPath = 'movie';
+            return endpointService.postServerRequest(urlPath, data);
+        }
+
+
+        function updateMovie(id, data) {
+            $log.debug('requestService -> updateMovie');
+            var urlPath = 'movie/' + id;
+            return endpointService.putServerRequest(urlPath, data);
+        }
+
+
+        function deleteMovie(id) {
+            $log.debug('requestService -> deleteMovie');
+            var urlPath = 'movie/' + id;
+            return endpointService.deleteServerRequest(urlPath);
+        }
+
 
         /**
          * Used for obtaining upcoming data from the server
@@ -43,6 +63,31 @@
         }
 
 
+        function getUpcomingByID(id) {
+            $log.debug('requestService -> getUpcomingByID');
+            var urlPath = 'upcoming/' + id;
+            return endpointService.getServerRequest(urlPath);
+        }
+
+        function saveUpcoming(data) {
+            $log.debug('requestService -> saveUpcoming');
+            var urlPath = 'upcoming';
+            return endpointService.postServerRequest(urlPath, data);
+        }
+
+        function updateUpcoming(id, data) {
+            $log.debug('requestService -> updateUpcoming');
+            var urlPath = 'upcoming/' + id;
+            return endpointService.putServerRequest(urlPath, data);
+        }
+
+        function deleteUpcoming(id) {
+            $log.debug('requestService -> deleteUpcoming');
+            var urlPath = 'upcoming/' + id;
+            return endpointService.deleteServerRequest(urlPath);
+        }
+
+
         /**
          * Used for obtaining user data from the server
          * @returns {promise}
@@ -50,6 +95,13 @@
         function getUsers() {
             $log.debug('requestService -> getUsers');
             var urlPath = 'users';
+            return endpointService.getServerRequest(urlPath);
+        }
+
+
+        function getUserByID(id) {
+            $log.debug('requestService -> getUserByID');
+            var urlPath = 'user/' + id;
             return endpointService.getServerRequest(urlPath);
         }
 
@@ -91,14 +143,76 @@
         }
 
 
+        // comments
+        function getComments() {
+            $log.debug('requestService -> getComments');
+            var urlPath = 'comments';
+            return endpointService.getServerRequest(urlPath);
+        }
+
+        function getCommentByID(id) {
+            $log.debug('requestService -> getCommentByID');
+            var urlPath = 'comment/' + id;
+            return endpointService.getServerRequest(urlPath);
+        }
+
+        function saveComment(data) {
+            $log.debug('requestService -> saveComment');
+            var urlPath = 'comment';
+            return endpointService.postServerRequest(urlPath, data);
+        }
+
+        function updateComment(id, data) {
+            $log.debug('requestService -> updateComment');
+            var urlPath = 'comment/' + id;
+            return endpointService.putServerRequest(urlPath, data);
+        }
+
+        function deleteComment(id) {
+            $log.debug('requestService -> deleteComment');
+            var urlPath = 'comment/' + id;
+            return endpointService.deleteServerRequest(urlPath);
+        }
+
+
+        // Ratings
+        function getRatings() {
+            $log.debug('requestService -> getRatings');
+            var urlPath = 'ratings';
+            return endpointService.getServerRequest(urlPath);
+        }
+
+        function deleteRating(id) {
+            $log.debug('requestService -> deleteRating');
+            var urlPath = 'rating/' + id;
+            return endpointService.deleteServerRequest(urlPath);
+        }
+
+
+
         return {
             getMovies: getMovies,
             getMovieByID: getMovieByID,
+            addMovie: addMovie,
+            updateMovie: updateMovie,
+            deleteMovie: deleteMovie,
             getUpcoming: getUpcoming,
+            getUpcomingByID: getUpcomingByID,
+            saveUpcoming: saveUpcoming,
+            updateUpcoming: updateUpcoming,
+            deleteUpcoming: deleteUpcoming,
             getUsers: getUsers,
+            getUserByID: getUserByID,
             addUser: addUser,
             updateUser: updateUser,
-            deleteUser: deleteUser
+            deleteUser: deleteUser,
+            getComments: getComments,
+            getCommentByID: getCommentByID,
+            saveComment: saveComment,
+            updateComment: updateComment,
+            deleteComment: deleteComment,
+            getRatings: getRatings,
+            deleteRating: deleteRating
         }
 
     }

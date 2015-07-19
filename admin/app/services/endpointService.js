@@ -2,7 +2,7 @@
 
     'use strict';
 
-    angular.module('myapp').factory('endpointService', endpointService);
+    angular.module('admin').factory('endpointService', endpointService);
 
     endpointService.$inject = ['$http', '$q', '$log'];
 
@@ -106,7 +106,6 @@
         /**
          * Used for deleting data from the server
          * @param urlPath
-         * @param requestObject
          * @returns {promise}
          */
         function deleteServerRequest(urlPath) {
