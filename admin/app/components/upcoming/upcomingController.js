@@ -14,12 +14,36 @@
         $scope.itemsPerPage = 10;
         $scope.currentPage = 1;
 
+        var id = 1;  // TODO: delete this and replace where needed whith real data
 
+        requestService.getUpcoming().then(
 
-        // crate a call to obtain all upcomings
-        // requestService.
+            // success function
+            function(data) {
+                $log.debug('upcomingController -> getUpcoming success', data);
+                $scope.upcomings = data.upcoming;
+            },
+
+            // error function
+            function() {
+                $log.debug('upcomingController -> geUpcoming error');
+            }
+        );
 
         // crate a call to obtain only one upcoming
+        requestService.getUpcomingByID(id).then(
+
+            // success function
+            function(data) {
+                $log.debug('upcomingController -> getUpcomingByID success', data);
+            },
+
+            // error function
+            function() {
+                $log.debug('upcomingController -> getUpcomingByID error');
+            }
+        );
+
 
         // create a call to save new upcoming
 

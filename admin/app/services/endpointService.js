@@ -106,7 +106,6 @@
         /**
          * Used for deleting data from the server
          * @param urlPath
-         * @param requestObject
          * @returns {promise}
          */
         function deleteServerRequest(urlPath) {
