@@ -6,34 +6,34 @@
 	$app = new \Slim\Slim();
 
 	// movies
-	$app->get('/movies', getMovies);
-	$app->get('movie/:id', getMovie);
-	$app->post('movie', addMovie);
-	$app->put('movie/:id', updateMovie);
-	$app->delete('movie/:id', deleteMovie);
+	$app->get('/movies', 'getMovies');
+	$app->get('/movie/:id', 'getMovie');
+	$app->post('/movie', 'addMovie');
+	$app->put('/movie/:id', 'updateMovie');
+	$app->delete('/movie/:id', 'deleteMovie');
 
 	// upcoming
-	$app->get('/upcoming', getUpcoming);
-	$app->get('/upcoming/:id', getUpcomingId);
-	$app->post('/upcoming', addUpcoming);
-	$app->put('/upcoming/:id', updateUpcoming);
-	$app->delete('upcoming/:id', deleteUpcoming);
+	$app->get('/upcoming', 'getUpcoming');
+	$app->get('/upcoming/:id', 'getUpcomingId');
+	$app->post('/upcoming', 'addUpcoming');
+	$app->put('/upcoming/:id', 'updateUpcoming');
+	$app->delete('upcoming/:id', 'deleteUpcoming');
 
 	// users
-	$app->get('/users', getUsers);
-	$app->get('/user/:id', getUser);
-	$app->post('/user', addUser);
-	$app->put('/user/:id', updateUser);
-	$app->delete('/user/:id', deleteUser);
+	$app->get('/users', 'getUsers');
+	$app->get('/user/:id', 'getUser');
+	$app->post('/user', 'addUser');
+	$app->put('/user/:id', 'updateUser');
+	$app->delete('/user/:id', 'deleteUser');
 
 	// comments
-	$app->get('/comments', getComments);
-	$app->get('/comment/:id', getComment);
-	$app->put('/comment/:id', updateComment);
-	$app->delete('/comment/:id', deleteComment);
+	$app->get('/comments', 'getComments');
+	$app->get('/comment/:id', 'getComment');
+	$app->put('/comment/:id', 'updateComment');
+	$app->delete('/comment/:id', 'deleteComment');
 
 	// ratings
-	$app->get('/ratings', getRatings);
+	$app->get('/ratings', 'getRatings');
 
 	$app->run();
 
