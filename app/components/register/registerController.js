@@ -4,9 +4,9 @@
 
     angular.module('myapp').controller('registerController', registerController);
 
-    registerController.$inject = ['$scope', '$log', 'requestService'];
+    registerController.$inject = ['$scope', '$log', '$filter', 'requestService'];
 
-    function registerController($scope, $log, requestService) {
+    function registerController($scope, $log, $filter, requestService) {
 
         $scope.occupations = [
             'Engineering',
@@ -15,33 +15,31 @@
             'Administration'
         ];
 
+        $scope.submit = submit;
 
-        $scope.submitForm = function() {
-            console.log('submit form initiated');
-        };
+        setTimeout(function() {
 
-        $scope.register = function() {
+            var checkUser = {username: "sm.axel", email: "email@nesto.com"};
 
+            requestService.checkUserAvailability(checkUser).then(
 
-            // check verification
+                // success function
+                function(data) {
+                    $log.debug('registerController -> checkUserAvailability success', data);
+                },
 
-            // create a payload
+                // error function
+                function() {
+                    $log.debug('registerController -> checkUserAvailability error');
+                }
+            );
 
-            // send a payload to a server
+        }, 5000);
 
-            // if success login and redirect to home page
+        function submit() {
 
-            // throw error if exists
-
-            console.log('name', $scope.name);
-            console.log('username', $scope.username);
-            console.log('password', $scope.password);
-            console.log('email', $scope.email);
-            console.log('notes', $scope.notes);
-            console.log('gender', $scope.gender);
-            console.log('occupation', $scope.occupation);
-            console.log('birthdate', $scope.birthdate);
-
+            // send user name to server to check if it's free
+            // send email to server to check if it's free
 
             var data = {
                 name: $scope.name,
@@ -51,20 +49,17 @@
                 notes: $scope.notes,
                 gender: $scope.gender,
                 occupation: $scope.occupation,
-                birthday: $scope.birthdate
+                birthday: $filter('date')($scope.birthday, 'd/M/yyyy')
             };
 
+            console.log('user register data', data);
 
-            /*
-                 $stmt->bindParam("name", $user->name);
-                 $stmt->bindParam("username", $user->username);
-                 $stmt->bindParam("password", $user->password);
-                 $stmt->bindParam("email", $user->email);
-                 $stmt->bindParam("notes", $user->notes);
-                 $stmt->bindParam("occupation", $user->occupation);
-                 $stmt->bindParam("gender", $user->gender);
-                 $stmt->bindParam("birthday", $user->birthday);
-             */
+            /*var checkUser = {
+                username: $scope.username,
+                email: $scope.email
+            };*/
+
+
 
 /*            requestService.updateUser(2, data).then(
 
@@ -79,7 +74,7 @@
                 }
             );*/
 
-        };
+        }
 
     }
 

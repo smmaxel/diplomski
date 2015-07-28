@@ -91,6 +91,18 @@
         }
 
 
+        /**
+         * Used for checking whether the user is available
+         * @param data
+         * @returns {promise}
+         */
+        function checkUserAvailability(data) {
+            $log.debug('requestService -> checkUserAvailability');
+            var urlPath = 'check';
+            return endpointService.postServerRequest(urlPath, data);
+        }
+
+
         return {
             getMovies: getMovies,
             getMovieByID: getMovieByID,
@@ -98,7 +110,8 @@
             getUsers: getUsers,
             addUser: addUser,
             updateUser: updateUser,
-            deleteUser: deleteUser
+            deleteUser: deleteUser,
+            checkUserAvailability: checkUserAvailability
         }
 
     }

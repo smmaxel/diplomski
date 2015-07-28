@@ -12,6 +12,7 @@
     $app->post('/user', 'addUser');
     $app->put('/user/:id', 'updateUser');
     $app->delete('/user/:id', 'deleteUser');
+    $app->post('/check', 'check');
 
     $app->run();
 
@@ -169,6 +170,37 @@
             $stmt->execute();
             $db = null;
             echo true;
+        } catch (PDOException $e) {
+            echo '{"error":{"text":' . $e->getMessage() . '}}';
+        }
+    }
+
+
+    /**
+     * Checks if username and/or password is available
+     * http://www.yourwebsite.com/api/check
+     * Method: POST
+     */
+    function check() {
+        $request = \Slim\Slim::getInstance()->request();
+        $user = json_decode($request->getBody());
+        $sql = "SELECT * FROM users WHERE (username = :username) OR (email = :email)";
+        try {
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam("username", $user->username);
+            $stmt->bindParam("email", $user->email);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC); // $stmt->fetchAll(PDO::FETCH_OBJ); //
+            $db = null;
+            //echo '{"result:"' . json_encode($row) . '}';
+            if(!$row) {
+                //echo '{"user:"' . '"available"}';
+                echo '{"error":{"text":' . '"available"' . '}}';
+            } else {
+                echo '{"error":{"text":' . '"unavailable"' . '}}';
+                // echo '{"user:"' . '"unavailable"}';
+            }
         } catch (PDOException $e) {
             echo '{"error":{"text":' . $e->getMessage() . '}}';
         }
