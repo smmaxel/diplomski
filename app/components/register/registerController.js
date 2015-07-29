@@ -19,9 +19,10 @@
 
         setTimeout(function() {
 
-            var checkUser = {username: "sm.axel", email: "email@nesto.com"};
+            var username = {username: "userTEst"};
+            var email = {email: "email@nesto.com"};
 
-            requestService.checkUserAvailability(checkUser).then(
+            requestService.checkUsername(username).then(
 
                 // success function
                 function(data) {
@@ -34,7 +35,20 @@
                 }
             );
 
-        }, 5000);
+            requestService.checkEmail(email).then(
+
+                // success function
+                function(data) {
+                    $log.debug('registerController -> checkEmail success', data);
+                },
+
+                // error function
+                function() {
+                    $log.debug('registerController -> checkEmail error');
+                }
+            );
+
+        }, 2000);
 
         function submit() {
 

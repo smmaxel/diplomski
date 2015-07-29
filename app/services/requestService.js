@@ -92,13 +92,25 @@
 
 
         /**
-         * Used for checking whether the user is available
+         * Used for checking username availability
          * @param data
          * @returns {promise}
          */
-        function checkUserAvailability(data) {
-            $log.debug('requestService -> checkUserAvailability');
-            var urlPath = 'check';
+        function checkUsername(data) {
+            $log.debug('requestService -> checkUsername');
+            var urlPath = 'checkusername';
+            return endpointService.postServerRequest(urlPath, data);
+        }
+
+
+        /**
+         * Used for checking email availability
+         * @param data
+         * @returns {promise}
+         */
+        function checkEmail(data) {
+            $log.debug('requestService -> checkEmail');
+            var urlPath = 'checkemail';
             return endpointService.postServerRequest(urlPath, data);
         }
 
@@ -111,7 +123,8 @@
             addUser: addUser,
             updateUser: updateUser,
             deleteUser: deleteUser,
-            checkUserAvailability: checkUserAvailability
+            checkUsername: checkUsername,
+            checkEmail: checkEmail
         }
 
     }
