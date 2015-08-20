@@ -4,12 +4,13 @@
 
     angular.module('myapp').controller('loginController', loginController);
 
-    loginController.$inject = ['$scope', '$log', '$location', 'requestService', 'loginService', 'CONFIG'];
+    loginController.$inject = ['$scope', '$log', '$location', '$timeout', 'toastr', 'loginService'];
 
-    function loginController($scope, $log, $location, requestService, loginService, CONFIG) {
+    function loginController($scope, $log, $location, $timeout, toastr, loginService) {
 
-
-        // if username and password are defined than call function to check authentification
+        /**
+         * Main call that verifies the username and password
+         */
         $scope.login = function() {
 
             if ($scope.username && $scope.password) {
@@ -27,10 +28,12 @@
                     // success function
                     function(data) {
                         $log.debug('logged in successfully', data);
-                        // login the user (broadcast the event)
-
-                        // if error notify the user about wrong credentials
-
+                            if (data.error) {
+                                toastr.error('Your credentials are invalid!', 'Error');
+                            } else                                {
+                                toastr.success('Successfully logged in. You will be redirected in 5 sec to main page.', 'Success');
+                                $timeout(function() { $location.path('/home'); }, 5000);
+                            }
                     },
 
                     // error function
@@ -40,25 +43,6 @@
                 );
             }
         };
-
-        // if autentification is good, set sesstion and uid and "login the user"
-
-        // if autentification is not ok notify the user that he used wrong credentials
-
-        /*function checkIsLogged() {
-            loginService.isLogged().then(
-
-                // success function
-                function(data) {
-                    console.log('checkIsLogged success', data);
-                },
-
-                // error function
-                function() {
-                    console.log('checkIsLogged error');
-                }
-            );
-        }*/
 
     }
 
