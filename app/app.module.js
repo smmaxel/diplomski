@@ -5,6 +5,8 @@
     angular.module('myapp', [
         'ngRoute',
         'ngSanitize',
+        'ngAnimate',
+        'toastr',
         'angular-loading-bar',
         'ui.bootstrap'
     ])

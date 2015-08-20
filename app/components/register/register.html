@@ -3,7 +3,7 @@
 
     <div class="panel panel-default loginPanel">
 
-        <form class="form-horizontal" name="userForm" ng-submit="submitForm()" novalidate>
+        <form class="form-horizontal" name="userForm" ng-submit="submit()" novalidate>
 
             <fieldset>
                 <legend class="loginPanelHeading">Register</legend>
@@ -11,25 +11,27 @@
                 <div class="form-group" ng-class="{ 'has-error' : userForm.name.$invalid && !userForm.name.$pristine }">
                     <label for="fullName" class="col-sm-2 control-label registerText">Name</label>
                     <div class="col-sm-9">
-                        <input type="text" id="fullName" name="name" class="form-control" ng-model="name" ng-required="true" />
-                        <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">You name is required.</p>
+                        <input type="text" id="fullName" name="name" class="form-control" ng-model="name" ng-required="true" autocomplete="off" />
+                        <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">Your name is required.</p>
                     </div>
                 </div>
 
                 <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }">
                     <label for="email" class="col-sm-2 control-label registerText">Email</label>
                     <div class="col-sm-9">
-                        <input type="email" id="email" name="email" class="form-control" ng-model="email" ng-required="true" />
+                        <input type="email" id="email" name="email" class="form-control" ng-model="email" ng-change="validateInput('email')" ng-required="true" autocomplete="off" ng-model-options="{debounce: 700}" />
                         <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Enter a valid email.</p>
+                        <p ng-show="states.emailState === -1" class="help-block"><span style="color: orange">Please use different email.</span></p>
                     </div>
                 </div>
 
                 <div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && !userForm.username.$pristine }">
                     <label for="username" class="col-sm-2 control-label registerText">Username</label>
                     <div class="col-sm-9">
-                        <input type="text" id="username" name="username" class="form-control" ng-model="username" ng-minlength="3" ng-maxlength="8" ng-required="true" />
+                        <input type="text" id="username" name="username" class="form-control" ng-model="username" ng-change="validateInput('username')" ng-minlength="3" ng-maxlength="8" ng-required="true" autocomplete="off" ng-model-options="{debounce: 700}" />
                         <p ng-show="userForm.username.$error.minlength" class="help-block">Username is too short.</p>
                         <p ng-show="userForm.username.$error.maxlength" class="help-block">Username is too long.</p>
+                        <p ng-show="states.usernameState === -1" class="help-block"><span style="color: orange">Please use different username.</span></p>
                     </div>
                 </div>
 
@@ -75,7 +77,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label registerText">Birthdate</label>
                     <div class="col-sm-9">
-                        <datepicker class="registerText" ng-model="birthdate" required>
+                        <datepicker class="registerText" ng-model="birthday" max-date="'2000-01-01'" required>
                         </datepicker>
                     </div>
                 </div>

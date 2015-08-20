@@ -12,6 +12,8 @@
     $app->post('/user', 'addUser');
     $app->put('/user/:id', 'updateUser');
     $app->delete('/user/:id', 'deleteUser');
+    $app->post('/checkusername', 'checkUsername');
+    $app->post('/checkemail', 'checkEmail');
 
     $app->run();
 
@@ -169,6 +171,60 @@
             $stmt->execute();
             $db = null;
             echo true;
+        } catch (PDOException $e) {
+            echo '{"error":{"text":' . $e->getMessage() . '}}';
+        }
+    }
+
+
+    /**
+     * Checks if username is available
+     * http://www.yourwebsite.com/api/checkusername
+     * Method: POST
+     */
+    function checkUsername() {
+        $request = \Slim\Slim::getInstance()->request();
+        $user = json_decode($request->getBody());
+        $sql = "SELECT * FROM users WHERE (username = :username)";
+        try {
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam("username", $user->username);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $db = null;
+            if(!$row) {
+                echo '{"username": "available"}';
+            } else {
+                echo '{"username": "unavailable"}';
+            }
+        } catch (PDOException $e) {
+            echo '{"error":{"text":' . $e->getMessage() . '}}';
+        }
+    }
+
+
+    /**
+     * Checks if email is available
+     * http://www.yourwebsite.com/api/checkemail
+     * Method: POST
+     */
+    function checkEmail() {
+        $request = \Slim\Slim::getInstance()->request();
+        $email = json_decode($request->getBody());
+        $sql = "SELECT * FROM users WHERE email = :email";
+        try {
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam('email', $email->email);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $db = null;
+            if (!$row) {
+                echo '{"email": "available"}';
+            } else {
+                echo '{"email": "unavailable"}';
+            }
         } catch (PDOException $e) {
             echo '{"error":{"text":' . $e->getMessage() . '}}';
         }

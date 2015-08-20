@@ -91,6 +91,30 @@
         }
 
 
+        /**
+         * Used for checking username availability
+         * @param data
+         * @returns {promise}
+         */
+        function checkUsername(data) {
+            $log.debug('requestService -> checkUsername');
+            var urlPath = 'checkusername';
+            return endpointService.postServerRequest(urlPath, data);
+        }
+
+
+        /**
+         * Used for checking email availability
+         * @param data
+         * @returns {promise}
+         */
+        function checkEmail(data) {
+            $log.debug('requestService -> checkEmail');
+            var urlPath = 'checkemail';
+            return endpointService.postServerRequest(urlPath, data);
+        }
+
+
         return {
             getMovies: getMovies,
             getMovieByID: getMovieByID,
@@ -98,7 +122,9 @@
             getUsers: getUsers,
             addUser: addUser,
             updateUser: updateUser,
-            deleteUser: deleteUser
+            deleteUser: deleteUser,
+            checkUsername: checkUsername,
+            checkEmail: checkEmail
         }
 
     }
