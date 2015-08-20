@@ -4,54 +4,54 @@
 
     angular.module('myapp').controller('navigationController', navigationController);
 
-    navigationController.$inject = ['$scope', '$log', '$location', '$modal', 'loginService', 'CONFIG'];
+    navigationController.$inject = ['$scope', '$log', '$timeout', '$modal', 'loginService'];
 
-    function navigationController($scope, $log, $location, $modal, loginService, CONFIG) {
+    function navigationController($scope, $log, $timeout, $modal, loginService) {
 
-        $scope.navigation = true; // display the navigatin pages (Movies, Upcoming etc.)
+        $scope.userLogged = false;
+        $scope.logout = logout;
+        checkIsLogged(); // initiate hart-beat function
 
-        /*$scope.$on('$routeChangeStart', function() {
 
-            if (CONFIG.user.name) {
-                $scope.navigation = true;
-                $scope.username = CONFIG.user.username;
-            } else {
-                $scope.navigation = false;
-                $scope.username = '';
-            }
-        });*/
-
-        $scope.userLogged = true;
-
-        $scope.logout = function() {
-
-            loginService.logout().then(
-
-                // success function
-                function(data) {
-                    $log.debug('logged out success', data);
-                    setTimeout(checkIsLogged, 3000);
-                },
-
-                // error function
-                function() {
-                    $log.debug('logged out error');
-                }
-
-            );
-        };
-
+        /**
+         * Hart-beat function for checking is user logged in
+         */
         function checkIsLogged() {
             loginService.isLogged().then(
-
                 // success function
                 function(data) {
                     console.log('checkIsLogged success', data);
+                    if (data.user.isLogged == 'true') {
+                        $scope.userLogged = true;
+                    } else {
+                        $scope.userLogged = false;
+                    }
+                    $timeout(checkIsLogged, 5000);
                 },
 
                 // error function
                 function() {
                     console.log('checkIsLogged error');
+                    logout();
+                }
+            );
+        }
+
+        /**
+         * Logout the user and destroys the active session
+         */
+        function logout() {
+            loginService.logout().then(
+                // success function
+                function(data) {
+                    $log.debug('logged out success', data);
+                    checkIsLogged();
+                },
+
+                // error function
+                function() {
+                    $log.debug('logged out error');
+                    checkIsLogged();
                 }
             );
         }

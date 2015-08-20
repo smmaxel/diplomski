@@ -1,7 +1,8 @@
 <?php
 
 	session_start();
-	//if( isset($_SESSION['uid']) ) print 'authentified';
-
-	//echo 'authentified2';
-	echo 'session usrname:' . $_SESSION['username'] . ', and session uid:' . $_SESSION['uid'];
+	if( isset($_SESSION['username']) && isset($_SESSION['uid']) ) {
+		echo '{"isLogged": "true", "username": ' . json_encode($_SESSION['username']) . ', "uid": ' . json_encode($_SESSION['uid']) . '}';
+	} else {
+		echo '{"isLogged": "false", "username": "NA", "uid": "NA"}';
+	}
