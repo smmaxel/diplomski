@@ -4,16 +4,23 @@
 
     angular.module('myapp').controller('movieCommentsController', movieCommentsController);
 
-    movieCommentsController.$inject = ['$scope', '$log', '$routeParams', 'requestService'];
+    movieCommentsController.$inject = ['$scope', '$log', '$routeParams', '$timeout', 'requestService', 'CONFIG'];
 
-    function movieCommentsController($scope, $log, $routeParams, requestService) {
+    function movieCommentsController($scope, $log, $routeParams, $timeout, requestService, CONFIG) {
 
+        $scope.leaveComment = CONFIG.userLogged;
+        $scope.movieComments = [];
         $scope.movieComment = '';
+        checkForChange(); // initiate function for the first time
 
-        //console.log('obtained route params: ', $routeParams.movieId);
+        /**
+         * Function for watching onChange
+         */
+        function checkForChange() {
+            $timeout(function() { checkForChange(); $scope.leaveComment =  CONFIG.userLogged; }, 1000);
+        }
 
-
-        // obtain data for the passed movieId
+        // Obtain Movie details for the passed movieID
         requestService.getMovieByID($routeParams.movieId).then(
 
             // success function
@@ -27,18 +34,53 @@
                 $log.debug('movieCommentsController -> getMovieByID error');
             }
 
-
         );
 
-        // logic for star voting
+        // Obtain Movie comments for the passed movieID
+        requestService.getMovieCommentsByID($routeParams.movieId).then(
 
-        // logic for submitting comments
+            // success function
+            function(data) {
+                $log.debug('movieCommentsController -> getCommentsByID success', data.comments);
+                $scope.movieComments = data.comments;
+            },
+
+            // error function
+            function() {
+                $log.debug('movieCommentsController -> getCommentsByID error');
+            }
+        );
 
 
-
+        // Save the entered movie comment
         $scope.commentSubmit = function() {
-            console.log('movieComment is:', $scope.movieComment);
+            if ($scope.leaveComment) {
+                console.log('movieComment is:', $scope.movieComment);
+
+                var payload = {
+                    comment: $scope.movieComment,
+                    movie_id: $scope.movie.movie_id,
+                    user: CONFIG.username
+                };
+
+                requestService.addMovieComment(payload).then(
+
+                    // success function
+                    function(data) {
+                        $log.debug('movieCommentsController -> addMovieComment success', data);
+                    },
+
+                    // error function
+                    function() {
+                        $log.debug('movieCommentsController -> addMovieComment error');
+                    }
+                );
+            }
         };
+
+
+
+        // logic for star voting
 
     }
 

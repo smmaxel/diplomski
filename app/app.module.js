@@ -11,7 +11,8 @@
         'ui.bootstrap'
     ])
     .constant('CONFIG', {
-        user : {}
+        userLogged : false,
+        username: null
     })
 
     .config(function($logProvider){

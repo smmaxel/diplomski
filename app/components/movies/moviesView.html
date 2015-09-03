@@ -29,7 +29,7 @@
                 <h4>{{ movie.subheading }}</h4>
                 <p>{{ movie.description }}</p>
                 <a class="btn btn-primary" ng-click="open(movie);">View Movie</i></a>
-                <a class="btn btn-primary" ng-click="movieComments(movie.id);">View Comments</i></a>
+                <a class="btn btn-primary" ng-click="movieComments(movie.movie_id);">View Comments</i></a>
                 <br />
                 <span style="margin-top: 20px; position: absolute">
                     <rating style="font-size: 20px;" ng-model="rating" max="5" readonly="true"></rating>

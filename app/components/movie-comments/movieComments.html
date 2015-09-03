@@ -62,14 +62,18 @@
         <!-- Blog Comments -->
 
         <!-- Comments Form -->
-        <div class="well">
+        <div class="well" ng-show="leaveComment">
             <h4>Leave a Comment:</h4>
             <form role="form">
                 <div class="form-group">
                     <textarea class="form-control" ng-model="movieComment" rows="5"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" ng-click="commentSubmit()">Submit</button>
+                <button type="submit" class="btn btn-primary" ng-click="commentSubmit()" ng-disabled="!movieComment">Submit</button>
             </form>
+        </div>
+
+        <div class="well text-center" ng-show="!leaveComment">
+            <h4>You must be logged in order to leave a comment!</h4>
         </div>
 
         <hr>
@@ -77,68 +81,33 @@
         <!-- Posted Comments -->
 
         <!-- Comment -->
-        <div class="media">
+        <div class="media" ng-repeat="comment in movieComments" ng-show="movieComments.length !== 0">
             <a class="pull-left" href="#">
                 <img class="media-object" src="http://placehold.it/64x64" alt="">
             </a>
             <div class="media-body">
-                <h4 class="media-heading">Start Bootstrap
-                    <small>August 25, 2014 at 9:30 PM</small>
+                <h4 class="media-heading">{{ comment.name }}
+                    <small>{{ comment.date }}</small>
                 </h4>
-                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                {{ comment.comment }}
             </div>
         </div>
 
-        <!-- Comment -->
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object" src="http://placehold.it/64x64" alt="">
-            </a>
-            <div class="media-body">
-                <h4 class="media-heading">Start Bootstrap
-                    <small>August 25, 2014 at 9:30 PM</small>
-                </h4>
-                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <img class="media-object" src="http://placehold.it/64x64" alt="">
-                </a>
-                <div class="media-body">
-                    <h4 class="media-heading">Start Bootstrap
-                        <small>August 25, 2014 at 9:30 PM</small>
-                    </h4>
-                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-
-                <!-- Nested Comment -->
-                <!--<div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="http://placehold.it/64x64" alt="">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">Nested Start Bootstrap
-                            <small>August 25, 2014 at 9:30 PM</small>
-                        </h4>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                    </div>
-                </div>-->
-                <!-- End Nested Comment -->
-                </div>
+        <!-- Will be shown if there is no comments -->
+        <div class="media" ng-show="movieComments.length === 0">
+            <div class="well text-center">
+                <h4>No Comments!</h4>
+                <h5>Be the first to comment the movie.</h5>
             </div>
         </div>
+        
     </div>
     <!-- /.row -->
 
     <hr>
 
     <!-- Footer -->
-    <footer>
-        <div class="row">
-            <div class="col-lg-12">
-                <p>Copyright &copy; Your Website 2014</p>
-            </div>
-        </div>
-    </footer>
+    <div ng-include src="'app/shared/footer/footer.html'"></div>
 
 </div>
 <!-- /.container -->

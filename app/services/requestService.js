@@ -8,7 +8,6 @@
 
     function requestService($log, endpointService) {
 
-
         /**
          * Used for obtaining movies data from the server
          * @returns {promise}
@@ -18,7 +17,6 @@
             var urlPath = 'movies';
             return endpointService.getServerRequest(urlPath);
         }
-
 
         /**
          * Used for obtaining particular movie by its ID
@@ -31,6 +29,27 @@
             return endpointService.getServerRequest(urlPath);
         }
 
+        /**
+         * Used for obtaining comments for particular movie by its ID
+         * @param id
+         * @returns {promise}
+         */
+        function getMovieCommentsByID(id) {
+            $log.debug('requestService -> getMovieCommentsByID');
+            var urlPath = 'comments/' + id;
+            return endpointService.getServerRequest(urlPath);
+        }
+
+        /**
+         * Used for saving new comments
+         * @param data
+         * @returns {promise}
+         */
+        function addMovieComment(data) {
+            $log.debug('requestService -> addMovieComment');
+            var urlPath = 'comments';
+            return endpointService.postServerRequest(urlPath, data);
+        }
 
         /**
          * Used for obtaining upcoming data from the server
@@ -42,7 +61,6 @@
             return endpointService.getServerRequest(urlPath);
         }
 
-
         /**
          * Used for obtaining user data from the server
          * @returns {promise}
@@ -52,7 +70,6 @@
             var urlPath = 'users';
             return endpointService.getServerRequest(urlPath);
         }
-
 
         /**
          * Used for saving new users data to the server
@@ -64,7 +81,6 @@
             var urlPath = 'user';
             return endpointService.postServerRequest(urlPath, data);
         }
-
 
         /**
          * Used for updating existing users data on the server
@@ -78,7 +94,6 @@
             return endpointService.putServerRequest(urlPath, data);
         }
 
-
         /**
          * Used for deleting existing users data on the server
          * @param id
@@ -89,7 +104,6 @@
             var urlPath = 'user/' + id;
             return endpointService.deleteServerRequest(urlPath);
         }
-
 
         /**
          * Used for checking username availability
@@ -102,7 +116,6 @@
             return endpointService.postServerRequest(urlPath, data);
         }
 
-
         /**
          * Used for checking email availability
          * @param data
@@ -114,10 +127,11 @@
             return endpointService.postServerRequest(urlPath, data);
         }
 
-
         return {
             getMovies: getMovies,
             getMovieByID: getMovieByID,
+            getMovieCommentsByID: getMovieCommentsByID,
+            addMovieComment: addMovieComment,
             getUpcoming: getUpcoming,
             getUsers: getUsers,
             addUser: addUser,

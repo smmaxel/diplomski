@@ -31,8 +31,8 @@
                             if (data.error) {
                                 toastr.error('Your credentials are invalid!', 'Error');
                             } else                                {
-                                toastr.success('Successfully logged in. You will be redirected in 5 sec to main page.', 'Success');
-                                $timeout(function() { $location.path('/home'); }, 5000);
+                                toastr.success('Successfully logged in. You will be redirected in 3 sec to main page.', 'Success');
+                                $timeout(function() { $location.path('/home'); }, 3000);
                             }
                     },
 
