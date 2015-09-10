@@ -102,6 +102,13 @@
          * Adds new user
          */
         $scope.submit = function() {
+
+            var captcha = jQuery('#g-recaptcha-response').val();
+            if (!captcha) {
+                toastr.error('Please fill the requirements for the captcha!', 'Error');
+                return;
+            }
+
             console.log('emailState', $scope.states.emailState);
             console.log('usernameState', $scope.states.usernameState);
             if ($scope.states.emailState !== 1 && $scope.states.usernameState !== 1) {
@@ -123,8 +130,8 @@
                     // success function
                     function(data) {
                         $log.debug('registerController -> addUser success', data);
-                        toastr.success('Successfully Registered!', 'Success');
-                        $timeout(function() { $location.path('/register'); }, 5000);
+                        toastr.success('Successfully Registered! You will be redirected to login page.', 'Success');
+                        $timeout(function() { $location.path('/login'); }, 5000);
                     },
 
                     // error function
