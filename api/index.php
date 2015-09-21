@@ -2,6 +2,9 @@
 
     session_start();
 
+    date_default_timezone_set('Etc/UTC');
+
+    require 'PHPMailer/PHPMailerAutoload.php';
     require 'Slim/Slim.php';
     \Slim\Slim::registerAutoloader();
 
@@ -123,25 +126,106 @@
     function addUser() {
         $request = \Slim\Slim::getInstance()->request();
         $user = json_decode($request->getBody());
-        $sql = "INSERT INTO users (user_id, name, username, password, email, notes, occupation, gender, birthday) VALUES (NULL, :name, :username, :password, :email, :notes, :occupation, :gender, :birthday)";
-        try {
+
+
+        
+        // logic for reCaptcha
+        $captcha = $user->gRecaptcha;
+
+        // Build post data to make request weith fetch_file_contents
+        $postdata = http_build_query(
+            array(
+                'secret' => '6LdQSgwTAAAAADpDAA-y3b6CGJ6RdB8HaCOlS1cd',
+                'response' => $captcha,
+                'remoteip' => $_SERVER['REMOTE_ADDR']
+            )
+        );
+
+        // Build options for the post request
+        $opts = array('http' =>
+            array(
+                'method' => 'POST',
+                'header' => 'Content-type: application/x-www-form-urlencoded',
+                'content' => $postdata
+            )
+        );
+
+        // Create a stream this is required to make post request with fetch_file_contents
+        $context = stream_context_create($opts);
+
+        /* Send request to Googles siteVerify API */
+        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify",false,$context);
+        $response = json_decode($response, true);
+
+        if ($response["success"] === false) { // if user verification failed
+            echo '{"error":{"text": "Bad captcha"}}';
+            exit();
+        }
+
+        // Create a new PHPMailer instance
+        $mail = new PHPMailer;
+        // Tell PHPMailer to use SMTP
+        $mail->isSMTP();
+
+        // Enable SMTP debugging
+        // 0 = off (for production use)
+        // 1 = client messages
+        // 2 = client and server messages
+        $mail->SMTPDebug = 0;
+
+        // Set the hostname of the mail server
+        $mail->Host = 'smtp.gmail.com';
+        // Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
+        $mail->Port = 587;
+        // Set the encryption system to use - ssl (deprecated) or tls
+        $mail->SMTPSecure = 'tls';
+        // Whether to use SMTP authentication
+        $mail->SMTPAuth = true;
+
+        //Username to use for SMTP authentication - use full email address for gmail
+        $mail->Username = "auto.responder.moviereview@gmail.com";
+        //Password to use for SMTP authentication
+        $mail->Password = "Marko022";
+
+        //Set who the message is to be sent from
+        $mail->setFrom('auto.responder.moviereview@gmail.com', 'Movie Review');
+        //Set who the message is to be sent to
+        $mail->addAddress($ser->email);
+        //Set the subject line
+        $mail->Subject = 'Movie Review Verification';
+
+        //convert HTML into a basic plain-text alternative body
+        $content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><title>PHPMailer Test</title></head><body>Verification link is YEAH... It works!!!!</body></html>';
+        $mail->msgHTML($content);
+        //send the message
+        $mail->send();
+        
+        // logic for image
+        $upload_dir = "../data/uploads";
+        $image_path = $upload_dir . "/default.png";
+        if ($user->img !== '') {
+            //$tmp_name = $_FILES["$user->img"]
+            //echo (json_encode($user->img));
+            //printf($user->img);
+        }
+        $sql = "INSERT INTO users (user_id, name, username, password, email, gender, birthday, img) VALUES (NULL, :name, :username, :password, :email, :gender, :birthday, :img)";
+        /*try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
             $stmt->bindParam("name", $user->name);
             $stmt->bindParam("username", $user->username);
             $stmt->bindParam("password", $user->password);
             $stmt->bindParam("email", $user->email);
-            $stmt->bindParam("notes", $user->notes);
-            $stmt->bindParam("occupation", $user->occupation);
             $stmt->bindParam("gender", $user->gender);
             $stmt->bindParam("birthday", $user->birthday);
+            $stmt->bindParam("img", $user->img);
             $stmt->execute();
             $user->id = $db->lastInsertId();
             $db = null;
             echo json_encode($user);
         } catch (PDOException $e) {
             echo '{"error":{"text":' . $e->getMessage() . '}}';
-        }
+        }*/
     }
 
     /**
