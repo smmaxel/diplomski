@@ -4,9 +4,9 @@
 
     angular.module('myapp').controller('registerController', registerController);
 
-    registerController.$inject = ['$scope', '$location', '$log', '$filter', '$timeout', 'toastr', 'requestService'];
+    registerController.$inject = ['$scope', '$location', '$log', '$filter', '$timeout', 'Upload', 'toastr', 'vcRecaptchaService', 'requestService'];
 
-    function registerController($scope, $location, $log, $filter, $timeout, toastr, requestService) {
+    function registerController($scope, $location, $log, $filter, $timeout, Upload, toastr, vcRecaptchaService, requestService) {
 
         // States for checking availability of username and email values
         $scope.states = {
@@ -17,12 +17,8 @@
         // Starting date
         $scope.birthday = '1990-01-01';
 
-        $scope.occupations = [
-            'Engineering',
-            'Marketing',
-            'Finance',
-            'Administration'
-        ];
+        // Captcha success response (not a robot)
+        var captchaResponse = null;
 
         /**
          * Funciton used to validate both Username and Email
@@ -97,13 +93,28 @@
 
         }
 
+        /**
+         * Upload a user profile picture
+         * @param file
+         */
+        /*$scope.uploadPicture = function(file) {
+            $scope.pictureFile = file;
+        };*/
+
+
+        /**
+         * Captcha set response (not a robot)
+         * @param response
+         */
+        $scope.setResponse = function (response) {
+            captchaResponse = response;
+        };
 
         /**
          * Adds new user
          */
         $scope.submit = function() {
-            console.log('emailState', $scope.states.emailState);
-            console.log('usernameState', $scope.states.usernameState);
+
             if ($scope.states.emailState !== 1 && $scope.states.usernameState !== 1) {
                 toastr.error('Check if all fields are filled correctly!', 'Error');
             } else {
@@ -112,22 +123,26 @@
                     username: $scope.username,
                     password: $scope.password,
                     email: $scope.email,
-                    notes: $scope.notes,
                     gender: $scope.gender,
-                    occupation: $scope.occupation,
-                    birthday: $filter('date')($scope.birthday, 'd/M/yyyy')
+                    birthday: $filter('date')($scope.birthday, 'd/M/yyyy'),
+                    gRecaptcha: vcRecaptchaService.getResponse(),
+                    img: $scope.picture || ''
                 };
+
+                console.log('detailed userData', userData);
 
                 requestService.addUser(userData).then(
 
                     // success function
                     function(data) {
                         $log.debug('registerController -> addUser success', data);
-                        toastr.success('Successfully Registered!', 'Success');
-                        $timeout(function() { $location.path('/register'); }, 5000);
+                        toastr.info('Please check your email address for confirmation email!', 'Note');
+                        toastr.success('Successfully Registered! You will be redirected to login page.', 'Success');
+                        //$timeout(function() { $location.path('/login'); }, 8000);
                     },
 
-                    // error function
+
+                    // error function/
                     function() {
                         $log.debug('registerController -> addUser error');
                         toastr.error('An error while registering has occurred!', 'Error');

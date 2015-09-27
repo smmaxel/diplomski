@@ -72,6 +72,10 @@
                         AuthService.checkAuth();
                     }
                 }
+            })
+            .when('/registered/:id', {
+                templateUrl: 'app/components/registered/registered.html',
+                controller: 'registeredController'
             });
 
 
