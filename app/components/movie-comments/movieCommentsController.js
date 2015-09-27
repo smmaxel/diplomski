@@ -11,7 +11,9 @@
         $scope.leaveComment = CONFIG.userLogged;
         $scope.movieComments = [];
         $scope.movieComment = '';
+        $scope.commented = false;
         checkForChange(); // initiate function for the first time
+        getMovieComments();
 
         /**
          * Function for watching onChange
@@ -37,20 +39,21 @@
         );
 
         // Obtain Movie comments for the passed movieID
-        requestService.getMovieCommentsByID($routeParams.movieId).then(
+        function getMovieComments() {
+            requestService.getMovieCommentsByID($routeParams.movieId).then(
 
-            // success function
-            function(data) {
-                $log.debug('movieCommentsController -> getCommentsByID success', data.comments);
-                $scope.movieComments = data.comments;
-            },
+                // success function
+                function(data) {
+                    $log.debug('movieCommentsController -> getCommentsByID success', data.comments);
+                    $scope.movieComments = data.comments;
+                },
 
-            // error function
-            function() {
-                $log.debug('movieCommentsController -> getCommentsByID error');
-            }
-        );
-
+                // error function
+                function() {
+                    $log.debug('movieCommentsController -> getCommentsByID error');
+                }
+            );
+        }
 
         // Save the entered movie comment
         $scope.commentSubmit = function() {
@@ -68,6 +71,8 @@
                     // success function
                     function(data) {
                         $log.debug('movieCommentsController -> addMovieComment success', data);
+                        $scope.commented = true;
+                        getMovieComments();
                     },
 
                     // error function

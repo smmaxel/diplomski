@@ -8,7 +8,9 @@
         'ngAnimate',
         'toastr',
         'angular-loading-bar',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'ngFileUpload',
+        'vcRecaptcha'
     ])
     .constant('CONFIG', {
         userLogged : false,
