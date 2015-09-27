@@ -41,7 +41,7 @@
         <!-- Blog Sidebar Widgets Column -->
         <div class="col-md-4">
             <div class="well">
-                <h4>Your Movie Rating</h4>
+                <h4>Movie Rating</h4>
                 <span style="font-size: 20px"><rating ng-model="rate" max="5" readonly="false" on-hover="hoveringOver(value)" on-leave="overStar = null"></rating></span>
                 <p>Ratings: 9.5/10 from 776,849 users</p>
             </div>
@@ -62,7 +62,7 @@
         <!-- Blog Comments -->
 
         <!-- Comments Form -->
-        <div class="well" ng-show="leaveComment">
+        <div class="well" ng-show="leaveComment && !commented">
             <h4>Leave a Comment:</h4>
             <form role="form">
                 <div class="form-group">
@@ -74,6 +74,10 @@
 
         <div class="well text-center" ng-show="!leaveComment">
             <h4>You must be logged in order to leave a comment!</h4>
+        </div>
+
+        <div class="well text-center" ng-show="commented">
+            <h5>Thank you for your comment! Your comment will re reviewed by admin side and approved if appropriate.</h5>
         </div>
 
         <hr>

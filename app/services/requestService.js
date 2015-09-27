@@ -127,6 +127,17 @@
             return endpointService.postServerRequest(urlPath, data);
         }
 
+        /**
+         * Used for verifying the registration id (email)
+         * @param id
+         * @returns {promise}
+         */
+        function verifyRegistration(id) {
+            $log.debug('requestService -> verifyRegistration');
+            var urlPath = 'register/' + id;
+            return endpointService.getServerRequest(urlPath);
+        }
+
         return {
             getMovies: getMovies,
             getMovieByID: getMovieByID,
@@ -138,7 +149,8 @@
             updateUser: updateUser,
             deleteUser: deleteUser,
             checkUsername: checkUsername,
-            checkEmail: checkEmail
+            checkEmail: checkEmail,
+            verifyRegistration: verifyRegistration
         }
 
     }

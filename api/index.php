@@ -15,6 +15,7 @@
     $app->get('/comments/:id', 'getComments');
     $app->get('/upcoming', 'getUpcoming');
     $app->get('/users', 'getUsers');
+    $app->get('/register/:id', 'registerUser');
     $app->post('/user', 'addUser');
     $app->put('/user/:id', 'updateUser');
     $app->delete('/user/:id', 'deleteUser');
@@ -119,6 +120,42 @@
     }
 
     /**
+     * Verify and approve the registered users
+     * http://www.yourwebsite.com/api/register/id
+     * Method: GET
+     */
+    function registerUser($id) {
+        $timestamp = time();
+        $sql = "SELECT * FROM users WHERE registered_id=:id";
+        try {
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam("id", $id);
+            $stmt->execute();
+            $user = $stmt->fetchObject();
+            $db = null;
+
+            if (!$user) {
+                echo '{"text": "unregistered"}';
+            } else {
+                // Check the 24h period and approve the user
+                if (($user->registered - $timestamp) <= 86400) {
+                    $approve_sql = "UPDATE users SET approved='1' WHERE user_id=$user->user_id";
+                    $approve_db = getConnection();
+                    $approve_stmt = $approve_db->prepare($approve_sql);
+                    $approve_stmt->execute();
+                    $approve_db = null;
+                    echo '{"text": "registered"}';
+                } else {
+                    echo '{"text": "expired"}';
+                }    
+            }
+        } catch (PDOException $e) {
+            echo '{"error": {"text":' . $e->getMessage() . '}}';
+        }
+    }
+
+    /**
      * Add the new registered user into the database
      * http://www.yourwebsite.com/api/user
      * Method: POST
@@ -126,7 +163,8 @@
     function addUser() {
         $request = \Slim\Slim::getInstance()->request();
         $user = json_decode($request->getBody());
-
+        $timestamp = time();
+        $register_id = md5($timestamp);
 
         
         // logic for reCaptcha
@@ -190,12 +228,18 @@
         //Set who the message is to be sent from
         $mail->setFrom('auto.responder.moviereview@gmail.com', 'Movie Review');
         //Set who the message is to be sent to
-        $mail->addAddress($ser->email);
+        $mail->addAddress($user->email);
         //Set the subject line
         $mail->Subject = 'Movie Review Verification';
 
-        //convert HTML into a basic plain-text alternative body
-        $content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><title>PHPMailer Test</title></head><body>Verification link is YEAH... It works!!!!</body></html>';
+        //Checks the env and crate dynamic email body
+        $server = $_SERVER['HTTP_HOST'];
+        if ($server === "localhost") {
+            $server = "http://localhost/diplomski/#/registered/" . $register_id;
+        } else {
+            $server = "http://" . $server . "/#/registered/" . $register_id;
+        }
+        $content = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Movie Review Verification</title><style>body { margin: 0; }.navbar-brand { float: left; font-family:sans-serif; color: #9d9d9d; height: 50px; padding: 15px 15px; font-size: 18px; line-height: 20px; text-decoration: none; } .navbar-brand:hover, .navbar-brand:focus { color: #e5e5e5; text-decoration: none; } .btn { display: inline-block; padding: 6px 12px; margin-bottom: 0; font-size: 14px; font-weight: normal; line-height: 1.42857143; text-align: center; white-space: nowrap; vertical-align: middle; -ms-touch-action: manipulation; touch-action: manipulation; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; background-image: none; border: 1px solid transparent; border-radius: 4px; } .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus { outline: thin dotted; outline: 5px auto -webkit-focus-ring-color; outline-offset: -2px; } .btn:hover, .btn:focus, .btn.focus { color: #333; text-decoration: none; } .btn:active, .btn.active { background-image: none; outline: 0; -webkit-box-shadow: inset 0 3px 5px rgba(0, 0,* 0, .125); box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125); } .btn-success { color: #fff; background-color: #5cb85c; border-color: #4cae4c; } .btn-success:hover, .btn-success:focus, .btn-success.focus, .btn-success:active, .btn-success.active, .open > .dropdown-toggle.btn-success { color: #fff; background-color: #449d44; border-color: #398439; }</style></head><body><div style="width: 100%; height: 50px; background-color: #222"><a class="navbar-brand" href="#/home">Movie Review</a></div><h3 style="color:#212121;font-family:sans-serif;font-size:30px;font-weight:100;padding-bottom:10px;margin-left:10px;">Please verify your email address</h3><p style="color:#484848;font-family:sans-serif;font-size:14px;font-weight:100;margin-left:10px;">Your username is: <b>' . $user->username . '</b></p><p style="color:#484848;font-family:sans-serif;font-size:18px;line-height:26px;font-weight:100;margin-left:10px;">Click the button below to confirm this email address:</p><a href="' . $server . '"<button type="button" class="btn btn-success" style="margin-left:10px;">Verify now</button></a></body></html>';
         $mail->msgHTML($content);
         //send the message
         $mail->send();
@@ -208,8 +252,8 @@
             //echo (json_encode($user->img));
             //printf($user->img);
         }
-        $sql = "INSERT INTO users (user_id, name, username, password, email, gender, birthday, img) VALUES (NULL, :name, :username, :password, :email, :gender, :birthday, :img)";
-        /*try {
+        $sql = 'INSERT INTO users (user_id, name, username, password, email, gender, birthday, registered, registered_id, approved, img) VALUES (NULL, :name, :username, :password, :email, :gender, :birthday, "'.$timestamp.'", "'.$register_id.'", "0", :img)';
+        try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
             $stmt->bindParam("name", $user->name);
@@ -225,7 +269,7 @@
             echo json_encode($user);
         } catch (PDOException $e) {
             echo '{"error":{"text":' . $e->getMessage() . '}}';
-        }*/
+        }
     }
 
     /**
