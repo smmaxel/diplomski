@@ -32,7 +32,7 @@
 }
 
 .modal {
-    top: 150px;
+    top: 50px;
 }
 
 
@@ -130,4 +130,13 @@ input[type=file] {
 
 .registerText {
     color: #e7e7e7;
+}
+
+.modal-content {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    background: rgba(0,0,0,.85);
+    border: none;
+    padding: 25px;
 }
