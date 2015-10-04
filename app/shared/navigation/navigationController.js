@@ -10,6 +10,7 @@
 
         $scope.userLogged = false;
         $scope.logout = logout;
+        $scope.loggedUser = null;
         checkIsLogged(); // initiate hart-beat function
 
 
@@ -25,6 +26,7 @@
                         $scope.userLogged = true;
                         CONFIG.userLogged = true;
                         CONFIG.username = data.user.username;
+                        $scope.loggedUser = data.user.username;
                     } else {
                         $scope.userLogged = false;
                         CONFIG.userLogged = false;
@@ -68,12 +70,12 @@
                 animation: true,
                 templateUrl: 'myNavModalContent.html',
                 controller: 'ModalInstanceNavCtrl',
-                size: 'lg',
+                size: 'lg'/*,
                 resolve: {
                     movie: function () {
                         return 'sm.maxel';
                     }
-                }
+                }*/
             });
 
         };

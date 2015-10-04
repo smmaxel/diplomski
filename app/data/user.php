@@ -20,7 +20,7 @@
 		if (isset($_SESSION["username"]) || isset($_SESSION["uid"])) {
 			echo '{"error": {"text": "Already logged in" }}';
 		} else {
-			$sql = "SELECT username, password FROM users WHERE username = '$username'";
+			$sql = "SELECT username, password FROM users WHERE username = '$username' && approved = '1'";
 			$result = mysqli_query($connection, $sql) or die(mysqli_error($connection));
 
 			if (mysqli_num_rows($result) > 0) {

@@ -84,13 +84,12 @@
 
         /**
          * Used for updating existing users data on the server
-         * @param id
          * @param data
          * @returns {promise}
          */
-        function updateUser(id, data) {
+        function updateUser(data) {
             $log.debug('requestService -> updateUser');
-            var urlPath = 'user/' + id;
+            var urlPath = 'user';
             return endpointService.putServerRequest(urlPath, data);
         }
 

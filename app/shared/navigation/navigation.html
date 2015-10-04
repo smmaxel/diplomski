@@ -26,11 +26,8 @@
                     <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="">{{ username }}</a>
+                           <span style="margin-left:20px;font-weight: bolder;">{{ loggedUser }}</span>
                         </li>
-                        <!--<li>
-                            <a href="">Settings</a>
-                        </li>-->
                         <li>
                             <a href="" ng-click="open()">Edit Profile</a>
                         </li>
@@ -50,19 +47,48 @@
         <!-- Modal Template-->
         <script type="text/ng-template" id="myNavModalContent.html">
             <div class="modal-header">
-                <h3 class="modal-title">{{movieName}}</h3>
+                <h3 class="modal-title" style="color:#fff;">Edit Profile</h3>
             </div>
             <div class="modal-body">
-                {{movieLink}}
-                <!--<div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" ng-src="{{movieLink}}" allowfullscreen="true"></iframe>
-                </div>-->
+                <form class="form-horizontal" name="userForm" ng-submit="update()" novalidate>
+
+                    <fieldset>
+                        <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }">
+                            <label for="email" class="col-sm-2 control-label registerText">Email</label>
+                            <div class="col-sm-9">
+                                <input type="email" id="email" name="email" class="form-control" ng-model="email" ng-change="validateEmail(email)" autocomplete="off" placeholder="Enter new email" ng-model-options="{debounce: 700}" />
+                                <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Enter a valid email.</p>
+                                <p ng-show="states.emailState === -1" class="help-block"><span style="color: orange">Please use different email.</span></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error' : userForm.password.$invalid && !userForm.password.$pristine }">
+                            <label for="password" class="col-sm-2 control-label registerText">Password</label>
+                            <div class="col-sm-9">
+                                <input type="password" id="password" name="password" class="form-control" ng-model="password" placeholder="Enter new password" ng-minlength="5" />
+                                <p ng-show="userForm.password.$error.minlength" class="help-block">Password is too short.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label registerText">Picture</label>
+                            <div class="col-sm-9">
+                                <input type="file" ngf-select ng-model="picture" name="file" accept="image/*" ngf-max-size="2MB" />
+                                <p ng-show="userForm.file.$error.maxSize" class="help-block" style="color: #a94442">File too large {{picture.size / 1000000|number:1}}MB: max {{picture.$errorParam}}</p>
+                                <div><img ng-show="userForm.file.$valid" ngf-src="!picture.$error && picture" class="thumb"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-2 loginPanelFields">
+                                <input type="submit" class="btn btn-primary loginSubmit" value="Update" ng-disabled="userForm.$invalid" />
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+                </form>
             </div>
-            </div>
-            <!--<div class="modal-footer">
-                <button class="btn btn-primary" ng-click="ok()">OK</button>
-                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-            </div>-->
         </script>
 
     </div>

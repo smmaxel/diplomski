@@ -17,7 +17,7 @@
     $app->get('/users', 'getUsers');
     $app->get('/register/:id', 'registerUser');
     $app->post('/user', 'addUser');
-    $app->put('/user/:id', 'updateUser');
+    $app->put('/user', 'updateUser');
     $app->delete('/user/:id', 'deleteUser');
     $app->post('/comments', 'addComment');
     $app->post('/checkusername', 'checkUsername');
@@ -274,31 +274,58 @@
 
     /**
      * Update existing user in database
-     * http://www.yourwebsite.com/api/user/id
+     * http://www.yourwebsite.com/api/user
      * Method: PUT
-     * @param $id
      */
-    function updateUser($id) {
+    function updateUser() {
         $request = \Slim\Slim::getInstance()->request();
         $user = json_decode($request->getBody());
-        $sql = "UPDATE users SET name=:name, username=:username, password=:password, email=:email, notes=:notes, occupation=:occupation, gender=:gender, birthday=:birthday WHERE user_id=:id";
+
+        $sqlSET = "";
+
+        if (isset($user->password)) {
+            $sqlSET = $sqlSET . ", password=:password";
+        }
+
+        if (isset($user->email)) {
+            $sqlSET = $sqlSET . ", email=:email";
+        }
+
+        if (isset($user->img)) {
+            $sqlSET = $sqlSET . ", img=:img";
+        }
+
+        if ($sqlSET === '') {
+            '{"text": "empty"}';
+            exit();
+        }
+
+        $sqlSET = substr($sqlSET, 2);
+
+        // TODO: missing logic for image upload
+        $sql = 'UPDATE users SET ' . $sqlSET . ' WHERE username="' . $_SESSION['username'] . '"';
         try {
-            $db = getConnection();
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam("id", $id);
-            $stmt->bindParam("name", $user->name);
-            $stmt->bindParam("username", $user->username);
-            $stmt->bindParam("password", $user->password);
-            $stmt->bindParam("email", $user->email);
-            $stmt->bindParam("notes", $user->notes);
-            $stmt->bindParam("occupation", $user->occupation);
-            $stmt->bindParam("gender", $user->gender);
-            $stmt->bindParam("birthday", $user->birthday);
-            $stmt->execute();
-            $db = null;
-            echo json_encode($user);
+            if ( isset($_SESSION['username']) && isset($_SESSION['uid']) ) {
+                $db = getConnection();
+                $stmt = $db->prepare($sql);
+                if (isset($user->password)) {
+                    $stmt->bindParam("password", $user->password);    
+                }
+                if (isset($user->email)) {
+                    $stmt->bindParam("email", $user->email);    
+                }
+                if (isset($user->img)) {
+                    //$stmt->bindParam("img", $user->img);    
+                }
+                $stmt->execute();
+                $db = null;
+
+                echo '{"text": "success"}';
+            } else {
+                echo '{"text": "error"}';
+            }
         } catch (PDOException $e) {
-            echo '{"error":{"text":' . $e->getMessage() . '}}';
+            echo '{"error": {"text":' . $e->getMessage() . '}}';
         }
     }
 
