@@ -166,6 +166,7 @@
         $timestamp = time();
         $register_id = md5($timestamp);
 
+        $user->password = md5($user->password);
         
         // logic for reCaptcha
         $captcha = $user->gRecaptcha;

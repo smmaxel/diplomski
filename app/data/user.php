@@ -25,7 +25,7 @@
 
 			if (mysqli_num_rows($result) > 0) {
 				while ($record = mysqli_fetch_array($result, MYSQLI_BOTH)) {
-					if ($record['password'] !== $password) {
+					if ($record['password'] !== md5($password) {
 						echo '{"error": {"text": "Username or Password invalid" }}';
 					} else {
 						session_start();
