@@ -42,8 +42,8 @@
         <div class="col-md-4">
             <div class="well">
                 <h4>Movie Rating</h4>
-                <span style="font-size: 20px"><rating ng-model="rate" max="5" readonly="false" on-hover="hoveringOver(value)" on-leave="overStar = null"></rating></span>
-                <p>Ratings: 9.5/10 from 776,849 users</p>
+                <span style="font-size: 20px"><rating ng-model="movie.rating" max="10" readonly="true"></rating></span>
+                <p>Ratings: {{ movie.rating }}/10</p>
             </div>
         </div>
     </div>

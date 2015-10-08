@@ -31,7 +31,7 @@
      * Method: GET
      */
     function getMovies() {
-        $sql = "SELECT * FROM movies";
+        $sql = "SELECT * FROM movies, rating WHERE movies.movie_id = rating.movie_id";
         try {
             $db = getConnection();
             $stmt = $db->query($sql);
@@ -49,7 +49,7 @@
      * @param $id
      */
     function getMovie($id) {
-        $sql = "SELECT * FROM movies WHERE movie_id=:id";
+        $sql = "SELECT * FROM movies, rating WHERE movies.movie_id=:id AND movies.movie_id = rating.movie_id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
