@@ -7,9 +7,10 @@
         'ngSanitize',
         'angular-loading-bar',
         'ui.bootstrap'
+
     ])
     .constant('CONFIG', {
-        user : {}
+            userLogged: true
     })
 
     .config(function($logProvider){

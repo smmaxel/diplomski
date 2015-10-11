@@ -38,9 +38,21 @@
             }
         );
 
+        $scope.addNewMovie = function() {
+          console.log('redirects to a new page where you can add new movie');
+        };
+
+        $scope.editMovie = function(movie_id) {
+            console.log('redirects to a new page whre you can edit', movie_id);
+        };
+
+        $scope.deleteMovie = function(movie_id) {
+            console.log('deletes the selected movie', movie_id);
+        };
+
         // create specific call for obtaining single movie (when editing)
         // TODO: refactor to use real value once edit field is clicked
-        requestService.getMovieByID('1').then(
+        /*requestService.getMovieByID('1').then(
 
             // success function
             function(data) {
@@ -51,7 +63,7 @@
             function() {
                 $log.debug('moviesController -> getMovieByID error');
             }
-        );
+        );*/
 
         // create specific call for saving single movie (updating)
         // TODO: refactor and prepare payload to be save (see example from registering user on UI side)
