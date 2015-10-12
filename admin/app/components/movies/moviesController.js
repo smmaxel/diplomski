@@ -12,9 +12,9 @@
             }
         });
 
-    moviesController.$inject = ['$scope', '$log', 'requestService'];
+    moviesController.$inject = ['$scope', '$location', '$log', 'requestService'];
 
-    function moviesController($scope, $log, requestService) {
+    function moviesController($scope, $location, $log, requestService) {
 
         // initial values
         $scope.movies = [];
@@ -39,11 +39,11 @@
         );
 
         $scope.addNewMovie = function() {
-          console.log('redirects to a new page where you can add new movie');
+            $location.path('/moviesNew');
         };
 
         $scope.editMovie = function(movie_id) {
-            console.log('redirects to a new page whre you can edit', movie_id);
+            $location.path('/moviesEdit/' + movie_id);
         };
 
         $scope.deleteMovie = function(movie_id) {

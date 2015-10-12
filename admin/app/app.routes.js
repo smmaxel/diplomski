@@ -41,7 +41,7 @@
                     }
                 }
             })
-            .when('/moviesEdit/:id', {
+            .when('/moviesEdit/:movieId', {
                 templateUrl: 'app/components/moviesEdit/moviesEditView.html',
                 controller: 'moviesEditController',
                 resolve: {

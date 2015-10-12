@@ -54,7 +54,7 @@
 
 //$app->get('movie/:id', getMovie);
     function getMovie($id) {
-        $sql = "SELECT * FROM movies WHERE id=:id";
+        $sql = "SELECT * FROM movies WHERE movie_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
