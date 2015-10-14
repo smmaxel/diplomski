@@ -4,14 +4,24 @@
 
     angular.module('admin').controller('moviesEditController', moviesEditController);
 
-    moviesEditController.$inject = ['$scope', '$routeParams', '$location', '$log', 'requestService'];
+    moviesEditController.$inject = ['$scope', '$routeParams', '$location', '$log', 'toastr', 'requestService'];
 
-    function moviesEditController($scope, $routeParams, $location, $log, requestService) {
+    function moviesEditController($scope, $routeParams, $location, $log, toastr, requestService) {
+
+        // Initial values
+        var state = 0;
+        var requiredFields = ['textHeading', 'textSubheading', 'textDescription', 'textStoryline', 'textLink', 'textIMDBRating'];
 
         $scope.backToMovies = function() {
             $location.path('/movies');
         };
 
+        // make call to obtain movie
+        loadMovieId();
+
+        /**
+         * Obtain movie data and show it in datatable fields
+         */
         function loadMovieId() {
             requestService.getMovieByID($routeParams.movieId).then(
                 // success function
@@ -39,7 +49,59 @@
             );
         }
 
-        loadMovieId();
+        // validate the entry
+        function validate() {
+            for(var i = 0, length = requiredFields.length; i < length; i++) {
+                if ($scope[requiredFields[i]] === undefined) {
+                    state = -1;
+                    break;
+                } else {
+                    state = 1;
+                }
+            }
+        }
+
+        $scope.saveMovie = function() {
+
+            validate();
+            var payload = {};
+
+            if (state === -1) {
+                toastr.error('All fields must be filled!', 'Error');
+            } else {
+
+                payload = {
+                    heading: $scope.textHeading,
+                    subheading: $scope.textSubheading,
+                    description: $scope.textDescription,
+                    storyline: $scope.textStoryline,
+                    img: $scope.picture,
+                    link: $scope.textLink,
+                    imdb_rating: $scope.textIMDBRating
+                };
+
+                requestService.updateMovie($routeParams.movieId, payload).then(
+
+                    // success function
+                    function(data) {
+                        $log.debug('moviesEditController -> updateMovie success', data);
+                        toastr.success('Data successfully saved!', 'Success');
+                    },
+
+                    // error function
+                    function() {
+                        $log.debug('moviesEditController -> updateMovie error');
+                        toastr.error('Unexpected error has occurred!', 'Error');
+                    }
+                );
+
+
+            }
+
+
+        };
+
+
 
 
 

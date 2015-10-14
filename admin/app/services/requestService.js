@@ -19,7 +19,6 @@
             return endpointService.getServerRequest(urlPath);
         }
 
-
         /**
          * Used for obtaining particular movie by its ID
          * @param id
