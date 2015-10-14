@@ -14,8 +14,6 @@
         $scope.itemsPerPage = 10;
         $scope.currentPage = 1;
 
-        var id = 1;  // TODO: delete this and replace where needed whith real data
-
         requestService.getUpcoming().then(
 
             // success function
@@ -30,8 +28,22 @@
             }
         );
 
+
+        $scope.addNewUpcoming = function() {
+            $location.path('/upcomingNew');
+        };
+
+        $scope.editUpcoming = function(id) {
+            // $location.path('/upcomingEdit/' + id);
+            console.log('edit upcoming under id ', id);
+        };
+
+        $scope.deleteUpcoming = function(id) {
+            console.log('delete upcoming under id ', id);
+        };
+
         // crate a call to obtain only one upcoming
-        requestService.getUpcomingByID(id).then(
+        /*requestService.getUpcomingByID(id).then(
 
             // success function
             function(data) {
@@ -42,7 +54,7 @@
             function() {
                 $log.debug('upcomingController -> getUpcomingByID error');
             }
-        );
+        );*/
 
 
         // create a call to save new upcoming

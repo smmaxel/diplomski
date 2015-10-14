@@ -74,14 +74,23 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="upcoming in upcomings | filter: searchKeyword | orderBy:orderByField:reverseSort | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage">
-                        <td>{{upcoming.id}}</td>
-                        <td>{{upcoming.name}}</td>
-                        <td>{{upcoming.length}}</td>
-                        <td>{{upcoming.type}}</td>
-                        <td>{{upcoming.year}}</td>
-                        <td>{{upcoming.upcoming}}</td>
-                        <td>edit btn</td>
-                        <td>del btn</td>
+                        <td>{{ upcoming.id }}</td>
+                        <td>{{ upcoming.name }}</td>
+                        <td>{{ upcoming.length }}</td>
+                        <td>{{ upcoming.type }}</td>
+                        <td>{{ upcoming.year }}</td>
+                        <td>{{ upcoming.upcoming }}</td>
+                        <td><button type="button" class="btn btn-info" ng-click="editUpcoming(upcoming.id)">Edit</button></td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Del <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="" ng-click="deleteUpcoming(upcoming.id)">Confirm</a></li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

@@ -59,6 +59,24 @@
                     }
                 }
             })
+            .when('/upcomingNew', {
+                templateUrl: 'app/components/upcomingNew/upcomingNewView.html',
+                controller: 'upcomingNewController',
+                resolve: {
+                    auth: function (AuthService) {
+                        AuthService.checkAuth();
+                    }
+                }
+            })
+            .when('/upcomingEdit/:id', {
+                templateUrl: 'app/components/upcomingEdit/upcomingEditView.html',
+                controller: 'upcomingEditController',
+                resolve: {
+                    auth: function (AuthService) {
+                        AuthService.checkAuth();
+                    }
+                }
+            })
             .when('/users', {
                 templateUrl: 'app/components/users/usersView.html',
                 controller: 'usersController',
