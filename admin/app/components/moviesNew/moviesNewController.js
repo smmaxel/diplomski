@@ -12,12 +12,6 @@
         var state = 0;
         var requiredFields = ['textHeading', 'textSubheading', 'textDescription', 'textStoryline', 'textLink', 'textIMDBRating'];
 
-
-        // logic goes here
-        $scope.saveMovie = function() {
-            console.log('This will validate the data and save the movie!');
-        };
-
         $scope.backToMovies = function() {
             $location.path('/movies');
         };

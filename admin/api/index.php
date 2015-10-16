@@ -17,7 +17,7 @@
 	$app->get('/upcoming/:id', 'getUpcomingId');
 	$app->post('/upcoming', 'addUpcoming');
 	$app->put('/upcoming/:id', 'updateUpcoming');
-	$app->delete('upcoming/:id', 'deleteUpcoming');
+	$app->delete('/upcoming/:id', 'deleteUpcoming');
 
 	// users
 	$app->get('/users', 'getUsers');
