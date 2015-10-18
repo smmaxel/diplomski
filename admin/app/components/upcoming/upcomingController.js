@@ -42,8 +42,8 @@
         };
 
         $scope.editUpcoming = function(id) {
-            // $location.path('/upcomingEdit/' + id);
-            console.log('edit upcoming under id ', id);
+            $location.path('/upcomingEdit/' + id);
+            /*console.log('edit upcoming under id ', id);*/
         };
 
         $scope.deleteUpcoming = function(id) {

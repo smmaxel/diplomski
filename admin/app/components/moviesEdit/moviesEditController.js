@@ -52,7 +52,7 @@
         // validate the entry
         function validate() {
             for(var i = 0, length = requiredFields.length; i < length; i++) {
-                if ($scope[requiredFields[i]] === undefined) {
+                if ($scope[requiredFields[i]] === undefined || $scope[requiredFields[i]] === '') {
                     state = -1;
                     break;
                 } else {
