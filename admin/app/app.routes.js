@@ -86,9 +86,36 @@
                     }
                 }
             })
+            .when('/userNew', {
+                templateUrl: 'app/components/usersNew/usersNewView.html',
+                controller: 'usersNewController',
+                resolve: {
+                    auth: function (AuthService) {
+                        AuthService.checkAuth();
+                    }
+                }
+            })
+            .when('/userEdit/:user_id', {
+                templateUrl: 'app/components/usersEdit/usersEditView.html',
+                controller: 'usersEditController',
+                resolve: {
+                    auth: function (AuthService) {
+                        AuthService.checkAuth();
+                    }
+                }
+            })
             .when('/comments', {
                 templateUrl: 'app/components/comments/commentsView.html',
                 controller: 'commentsController',
+                resolve: {
+                    auth: function (AuthService) {
+                        AuthService.checkAuth();
+                    }
+                }
+            })
+            .when('/commentsEdit/:id', {
+                templateUrl: 'app/components/commentsEdit/commentsEditView.html',
+                controller: 'commentsEditController',
                 resolve: {
                     auth: function (AuthService) {
                         AuthService.checkAuth();

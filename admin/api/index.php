@@ -24,13 +24,14 @@
 	$app->get('/user/:id', 'getUser');
 	$app->post('/user', 'addUser');
 	$app->put('/user/:id', 'updateUser');
+    $app->put('/userApp/:id', 'approveUser');
 	$app->delete('/user/:id', 'deleteUser');
 
 	// comments
 	$app->get('/comments', 'getComments');
 	$app->get('/comment/:id', 'getComment');
 	$app->put('/comment/:id', 'updateComment');
-	$app->delete('/comment/:id', 'deleteComment');
+	$app->delete('/comment/:id/:reason', 'deleteComment');
 
 	// ratings
 	$app->get('/ratings', 'getRatings');
@@ -248,7 +249,7 @@
 
 	//$app->get('/user/:id', getUser);
     function getUser($id) {
-        $sql = "SELECT * FROM users WHERE id=:id";
+        $sql = "SELECT * FROM users WHERE user_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -292,7 +293,7 @@
     function updateUser($id) {
         $request = \Slim\Slim::getInstance()->request();
         $user = json_decode($request->getBody());
-        $sql = "UPDATE users SET name=:name, username=:username, password=:password, email=:email, notes=:notes, occupation=:occupation, gender=:gender, birthday=:birthday WHERE id=:id";
+        $sql = "UPDATE users SET name=:name, username=:username, password=:password, email=:email, gender=:gender, birthday=:birthday, registered=:registered, registered_id=:registered_id, approved=:approved, img=:img WHERE user_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -301,10 +302,12 @@
             $stmt->bindParam("username", $user->username);
             $stmt->bindParam("password", $user->password);
             $stmt->bindParam("email", $user->email);
-            $stmt->bindParam("notes", $user->notes);
-            $stmt->bindParam("occupation", $user->occupation);
             $stmt->bindParam("gender", $user->gender);
             $stmt->bindParam("birthday", $user->birthday);
+            $stmt->bindParam("registered", $user->registered);
+            $stmt->bindParam("registered_id", $user->registered_id);
+            $stmt->bindParam("approved", $user->approved);
+            $stmt->bindParam("img", $user->img);
             $stmt->execute();
             $db = null;
             echo json_encode($user);
@@ -313,9 +316,27 @@
         }
     }
 
+    // $app->put('/userApp/:id', 'approveUser');
+    function approveUser($id) {
+        $request = \Slim\Slim::getInstance()->request();
+        $user = json_decode($request->getBody());
+        $sql = "UPDATE users SET approved = '1' WHERE user_id=:id";
+        try {
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam("id", $id);
+            $stmt->execute();
+            $db = null;
+            echo json_encode($user);
+        } catch (PDOException $e) {
+            echo '{"error":{"text":' . $e->getMessage() . '}}';
+        }
+    }
+
+
 	//$app->delete('/user/:id', deleteUser);
     function deleteUser($id) {
-        $sql = "DELETE FROM users WHERE id=:id";
+        $sql = "DELETE FROM users WHERE user_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -349,7 +370,7 @@
 
 	//$app->get('/comment/:id', getComment);
     function getComment($id) {
-        $sql = "SELECT * FROM comments WHERE id=:id";
+        $sql = "SELECT * FROM comments WHERE comment_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -367,13 +388,16 @@
     function updateComment($id) {
         $request = \Slim\Slim::getInstance()->request();
         $comment = json_decode($request->getBody());
-        $sql = "UPDATE comments SET ????? WHERE id=:id";
+        $sql = "UPDATE comments SET comment=:comment, movie_id=:movie_id, date=:date, timestamp=:timestamp, approved=:approved WHERE comment_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
             $stmt->bindParam("id", $id);
-            $stmt->bindParam("???", $comment->something);
-            // fill with more data once you get the info
+            $stmt->bindParam("comment", $comment->comment);
+            $stmt->bindParam("movie_id", $comment->movie_id);
+            $stmt->bindParam("date", $comment->date);
+            $stmt->bindParam("timestamp", $comment->timestamp);
+            $stmt->bindParam("approved", $comment->approved);
             $stmt->execute();
             $db = null;
             echo json_encode($comment);
@@ -382,16 +406,17 @@
         }
     }
 
-	//$app->delete('/comment/:id', deleteComment);
-    function deleteComment($id) {
-        $sql = "DELETE FROM comments WHERE id=:id";
+	//$app->delete('/comment/:id/:reason', deleteComment);
+    function deleteComment($id, $reason) {
+        $sql = "DELETE FROM comments WHERE comment_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
             $stmt->bindParam("id", $id);
             $stmt->execute();
             $db = null;
-            echo true;
+            //echo true;
+            echo '{"success": {"text": ' . '"$reason"' . '}}';
         } catch (PDOException $e) {
             echo '{"error": {"text": ' . $e->getMessage() . '}}';
         }

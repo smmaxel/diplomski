@@ -4,9 +4,9 @@
 
     angular.module('admin').controller('usersController', usersController);
 
-    usersController.$inject = ['$scope', '$log', 'requestService'];
+    usersController.$inject = ['$scope', '$location', '$log', 'toastr', 'requestService'];
 
-    function usersController($scope, $log, requestService) {
+    function usersController($scope, $location, $log, toastr, requestService) {
 
         // initial values
         $scope.users = [];
@@ -14,45 +14,71 @@
         $scope.itemsPerPage = 10;
         $scope.currentPage = 1;
 
-        var id = 1; // TODO: remove this and replace with real data where needed
-
-
         // make a call to obtain all users
-        requestService.getUsers().then(
+        getUsers();
 
-            // success function
-            function(data) {
-                $log.debug('usersController -> getUsers success', data);
-                $scope.users = data.users;
-            },
+        function getUsers() {
+            requestService.getUsers().then(
 
-            // error function
-            function() {
-                $log.debug('usersController -> getUsers error');
-            }
-        );
+                // success function
+                function(data) {
+                    $log.debug('usersController -> getUsers success', data);
+                    $scope.users = data.users;
+                },
 
-        // make a call to obtain single user
-        requestService.getUserByID(id).then(
+                // error function
+                function() {
+                    $log.debug('usersController -> getUsers error');
+                }
+            );
+        }
 
-            // success function
-            function(data) {
-                $log.debug('userController -> getUserByID success', data);
-            },
+        $scope.approveUser = function(user_id) {
+            requestService.approveUser(user_id).then(
 
-            // error function
-            function() {
-                $log.debug('userController -> getUserByID error');
-            }
-        );
+                // success function
+                function(data) {
+                    $log.debug('userController -> approveUser suceess', data);
+                    toastr.success('User successfully approved!', 'Success');
+                    getUsers();
+                },
 
-        // create new user
+                // error function
+                function() {
+                    $log.debug('userController -> approveUser error');
+                    toastr.error('Unexpected error has occurred!', 'Error');
+                }
 
-        // update existing
+            );
+        };
 
-        // update -> verify existing
+        $scope.addNewUser = function() {
+            $location.path('/userNew');
+        };
 
-        // delete existing
+        $scope.editUser = function(user_id) {
+            $location.path('/userEdit/' + user_id);
+        };
+
+
+        $scope.deleteUser = function(user_id) {
+            requestService.deleteUser(user_id).then(
+
+                // success function
+                function(data) {
+                    $log.debug('usersController -> deleteUser success', data);
+                    toastr.success('User successfully deleted!', 'Success');
+                    getUsers();
+                },
+
+                // error function\
+                function() {
+                    $log.debug('usersController -> deleteUser error');
+                    toastr.error('Unexpected error has occurred!', 'Error');
+                }
+            );
+        }
+
 
     }
 

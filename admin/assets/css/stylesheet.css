@@ -42,6 +42,12 @@
     margin-bottom: 10px;
 }
 
+.commentsDeleteBtn {
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 50px;
+}
+
 /* fix for the drop-down delete btn menu*/
 .dropdown-menu {
     min-width: 50px;

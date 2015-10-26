@@ -12,19 +12,24 @@
         <div class="row">
             <div class="col-lg-12">
                 <!-- Page Content -->
+                <div class="input-group addNewDataTablePosition">
+                    <button type="button" class="btn btn-success" ng-click="addNewUser()">
+                        Add a new user
+                    </button>
+                </div>
                 <div class="input-group searchDataTablePosition">
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-            </span>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </span>
                     <input type="text" class="form-control" placeholder="Search for..." ng-model="searchKeyword" ng-model-options="{debounce: {'default': 1500, 'blur': 0}}">
                 </div>
 
                 <table class="table table-striped table-bordered">
                     <thead>
                     <tr>
-                        <th ng-click="orderByField = 'id'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
+                        <th ng-click="orderByField = 'user_id'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
                             ID
-                            <span ng-show="orderByField == 'id'" class="tableHeadGlyphiconPosition">
+                            <span ng-show="orderByField == 'user_id'" class="tableHeadGlyphiconPosition">
                                 <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
                                 <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
                             </span>
@@ -43,30 +48,9 @@
                                 <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
                             </span>
                         </th>
-                        <th ng-click="orderByField = 'password'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
-                            Password
-                            <span ng-show="orderByField == 'password'" class="tableHeadGlyphiconPosition">
-                                <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
-                                <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-                            </span>
-                        </th>
                         <th ng-click="orderByField = 'email'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
                             Email
                             <span ng-show="orderByField == 'email'" class="tableHeadGlyphiconPosition">
-                                <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
-                                <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-                            </span>
-                        </th>
-                        <th ng-click="orderByField = 'notes'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
-                            Notes
-                            <span ng-show="orderByField == 'notes'" class="tableHeadGlyphiconPosition">
-                                <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
-                                <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-                            </span>
-                        </th>
-                        <th ng-click="orderByField = 'occupation'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
-                            Occupation
-                            <span ng-show="orderByField == 'occupation'" class="tableHeadGlyphiconPosition">
                                 <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
                                 <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
                             </span>
@@ -85,12 +69,15 @@
                                 <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
                             </span>
                         </th>
-                        <th ng-click="orderByField = 'registered'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
-                            Registered
-                            <span ng-show="orderByField == 'registered'" class="tableHeadGlyphiconPosition">
+                        <th ng-click="orderByField = 'approved'; reverseSort = !reverseSort" class="pointerHand tableHeadArea">
+                            Approved
+                            <span ng-show="orderByField == 'approved'" class="tableHeadGlyphiconPosition">
                                 <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
                                 <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
                             </span>
+                        </th>
+                        <th>
+                            Approve
                         </th>
                         <th>
                             Edit
@@ -98,26 +85,29 @@
                         <th>
                             Delete
                         </th>
-                        <th>
-                            Approve
-                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="user in users | filter: searchKeyword | orderBy:orderByField:reverseSort | startFrom:(currentPage-1)*itemsPerPage | limitTo:itemsPerPage">
-                        <td>{{user.id}}</td>
-                        <td>{{user.name}}</td>
-                        <td>{{user.username}}</td>
-                        <td>{{user.password}}</td>
-                        <td>{{user.email}}</td>
-                        <td>{{user.notes}}</td>
-                        <td>{{user.occupation}}</td>
-                        <td>{{user.gender}}</td>
-                        <td>{{user.birthday}}</td>
-                        <td>{{user.registered}}</td>
-                        <td>edit btn</td>
-                        <td>del btn</td>
-                        <td>approve btn</td>
+                        <td>{{ user.user_id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.gender }}</td>
+                        <td>{{ user.birthday }}</td>
+                        <td>{{ user.approved }}</td>
+                        <td><button type="button" class="btn btn-info" ng-click="approveUser(user.user_id)" ng-disabled="(user.approved == 1)">Approve</button></td>
+                        <td><button type="button" class="btn btn-info" ng-click="editUser(user.user_id)">Edit</button></td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Del <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="" ng-click="deleteUser(user.user_id)">Confirm</a></li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

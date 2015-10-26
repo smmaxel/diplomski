@@ -116,7 +116,6 @@
             return endpointService.postServerRequest(urlPath, data);
         }
 
-
         /**
          * Used for updating existing users data on the server
          * @param id
@@ -129,6 +128,17 @@
             return endpointService.putServerRequest(urlPath, data);
         }
 
+        /**
+         * Used for approving existing users on the server
+         * @param id
+         * @param data
+         * @returns {promise}
+         */
+        function approveUser(id) {
+            $log.debug('requestService -> approveUser');
+            var urlPath = 'userApp/' + id;
+            return endpointService.putServerRequest(urlPath);
+        }
 
         /**
          * Used for deleting existing users data on the server
@@ -155,11 +165,11 @@
             return endpointService.getServerRequest(urlPath);
         }
 
-        function saveComment(data) {
+        /*function saveComment(data) {
             $log.debug('requestService -> saveComment');
             var urlPath = 'comment';
             return endpointService.postServerRequest(urlPath, data);
-        }
+        }*/
 
         function updateComment(id, data) {
             $log.debug('requestService -> updateComment');
@@ -167,9 +177,9 @@
             return endpointService.putServerRequest(urlPath, data);
         }
 
-        function deleteComment(id) {
+        function deleteComment(id, reason) {
             $log.debug('requestService -> deleteComment');
-            var urlPath = 'comment/' + id;
+            var urlPath = 'comment/' + id + '/' + reason;
             return endpointService.deleteServerRequest(urlPath);
         }
 
@@ -204,10 +214,11 @@
             getUserByID: getUserByID,
             addUser: addUser,
             updateUser: updateUser,
+            approveUser: approveUser,
             deleteUser: deleteUser,
             getComments: getComments,
             getCommentByID: getCommentByID,
-            saveComment: saveComment,
+            // saveComment: saveComment,
             updateComment: updateComment,
             deleteComment: deleteComment,
             getRatings: getRatings,

@@ -2,52 +2,52 @@
 
     'use strict';
 
-    angular.module('admin').controller('commentsController', commentsController);
+    angular.module('admin').controller('commentsController', commentsController)
+        .filter('startFrom', function() {
+            return function(input, start) {
+                start = +start;
+                if (input) {
+                    return input.slice(start);
+                }
+            }
+        });
 
-    commentsController.$inject = ['$scope', '$log', 'requestService'];
+    commentsController.$inject = ['$scope', '$location', '$log', 'requestService'];
 
-    function commentsController($scope, $log, requestService) {
+    function commentsController($scope, $location, $log, requestService) {
 
         // initial values
-        $scope.users = [];
+        $scope.comments = [];
         $scope.totalItems =  0;
         $scope.itemsPerPage = 10;
         $scope.currentPage = 1;
 
-        var id = 1; // TODO: remove this and replace with real data where needed
+        // make initial call to obtain comments
+        getComments();
 
+        /**
+         * Obtain comments and shows them on the UI
+         */
+        function getComments() {
+            requestService.getComments().then(
 
-        // create a call to obtain all comments
-        requestService.getComments().then(
+                // success function
+                function(data) {
+                    $log.debug('commentsController -> getComments success', data);
+                    $scope.comments = data.comments;
+                    $scope.totalItems = $scope.comments.length;
+                },
 
-            // success function
-            function(data) {
-                $log.debug('commentsController -> getComments success', data);
-            },
+                // error function
+                function() {
+                    $log.debug('commentsController -> getComments error');
+                }
+            );
+        }
 
-            // error function
-            function() {
-                $log.debug('commentsController -> getComments error');
-            }
-        );
-
-        // create a call to obtain only one comment
-        requestService.getCommentByID(id).then(
-
-            // success function
-            function(data) {
-                $log.debug('commentsController -> getCommentsByID success', data);
-            },
-
-            // error function
-            function() {
-                $log.debug('commentsController -> getCommentsByID errors');
-            }
-        );
-
-        // update the comment
-
-        // delete a comment
+        $scope.editComment = function(comment_id) {
+            $location.path('/commentsEdit/' + comment_id);
+        };
 
     }
 
