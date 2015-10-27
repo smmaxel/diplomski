@@ -35,6 +35,7 @@
 
 	// ratings
 	$app->get('/ratings', 'getRatings');
+    $app->delete('/rating/:id', 'deleteRating');
 
 	$app->run();
 
@@ -416,6 +417,21 @@
             $stmt->execute();
             $db = null;
             //echo true;
+            echo '{"success": {"text": "deleted"}}';
+        } catch (PDOException $e) {
+            echo '{"error": {"text": ' . $e->getMessage() . '}}';
+        }
+    }
+
+    function deleteRating($id) {
+        $sql = "DELETE FROM rating WHERE rating_id=:id";
+        try {
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam("id", $id);
+            $stmt->execute();
+            $db = null;
+            //echo true;
             echo '{"success": {"text": ' . '"$reason"' . '}}';
         } catch (PDOException $e) {
             echo '{"error": {"text": ' . $e->getMessage() . '}}';
@@ -429,7 +445,7 @@
 
 	//$app->get('/ratings', getRatings);
     function getRatings() {
-        $sql = "SELECT * FROM ratings";
+        $sql = "SELECT * FROM rating";
         try {
             $db = getConnection();
             $stmt = $db->query($sql);
