@@ -6,38 +6,40 @@
 	$app = new \Slim\Slim();
 
 	// movies
-	$app->get('/movies', 'getMovies');
-	$app->get('/movie/:id', 'getMovie');
-	$app->post('/movie', 'addMovie');
-	$app->put('/movie/:id', 'updateMovie');
-	$app->delete('/movie/:id', 'deleteMovie');
+	$app->get('/movies', 'getMovies'); // get all movies
+	$app->get('/movie/:id', 'getMovie'); // get a movie for editing
+	$app->post('/movie', 'addMovie'); // add a new movie
+	$app->put('/movie/:id', 'updateMovie'); // update a movie after editing
+	$app->delete('/movie/:id', 'deleteMovie'); // delete a movie
 
 	// upcoming
 	$app->get('/upcoming', 'getUpcoming');
 	$app->get('/upcoming/:id', 'getUpcomingId');
 	$app->post('/upcoming', 'addUpcoming');
 	$app->put('/upcoming/:id', 'updateUpcoming');
-	$app->delete('upcoming/:id', 'deleteUpcoming');
+	$app->delete('/upcoming/:id', 'deleteUpcoming');
 
 	// users
 	$app->get('/users', 'getUsers');
 	$app->get('/user/:id', 'getUser');
 	$app->post('/user', 'addUser');
 	$app->put('/user/:id', 'updateUser');
+    $app->put('/userApp/:id', 'approveUser');
 	$app->delete('/user/:id', 'deleteUser');
 
 	// comments
 	$app->get('/comments', 'getComments');
 	$app->get('/comment/:id', 'getComment');
 	$app->put('/comment/:id', 'updateComment');
-	$app->delete('/comment/:id', 'deleteComment');
+	$app->delete('/comment/:id/:reason', 'deleteComment');
 
 	// ratings
 	$app->get('/ratings', 'getRatings');
+    $app->delete('/rating/:id', 'deleteRating');
 
 	$app->run();
 
-//$app->get('/movies', getMovies);
+	//$app->get('/movies', getMovies);
 	function getMovies() {
 		$sql = "SELECT * FROM movies";
 		try {
@@ -52,9 +54,9 @@
 	}
 
 
-//$app->get('movie/:id', getMovie);
+	//$app->get('movie/:id', getMovie);
     function getMovie($id) {
-        $sql = "SELECT * FROM movies WHERE id=:id";
+        $sql = "SELECT * FROM movies WHERE movie_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -69,21 +71,21 @@
     }
 
 
-//$app->post('movie', addMovie);
+	//$app->post('movie', addMovie);
     function addMovie() {
         $request = \Slim\Slim::getInstance()->request();
         $movie = json_decode($request->getBody());
-        $sql = "INSERT INTO movies (id, heading, subheading, description, storyline, img, link, commentsID, ratingID) VALUES (NULL, :heading, :subheading, :description, :storyline, :img, :link, :commentsID, :ratingID)";
+        $sql = "INSERT INTO movies (movie_id, heading, subheading, description, storyline, img, link, imdb_rating) VALUES (NULL, :heading, :subheading, :description, :storyline, :img, :link, :imdb_rating)";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
             $stmt->bindParam("heading", $movie->heading);
             $stmt->bindParam("subheading", $movie->subheading);
+			$stmt->bindParam("description", $movie->description);
             $stmt->bindParam("storyline", $movie->storyline);
             $stmt->bindParam("img", $movie->img);
             $stmt->bindParam("link", $movie->link);
-            $stmt->bindParam("commentsID", $movie->commentsID);
-            $stmt->bindParam("ratingID", $movie->ratingID);
+            $stmt->bindParam("imdb_rating", $movie->imdb_rating);
             $stmt->execute();
             $movie->id = $db->lastInsertId();
             $db = null;
@@ -94,22 +96,22 @@
     }
 
 
-//$app->put('movie/:id', updateMovie);
+	//$app->put('movie/:id', updateMovie);
     function updateMovie($id) {
         $request = \Slim\Slim::getInstance()->request();
         $movie = json_decode($request->getBody());
-        $sql = "UPDATE movies SET heading=:heading, subheading=:subheading, storyline=:storyline, img=:img, link=:link, commentsID=:commentsID, ratingID=:ratingID WHERE id=:id";
+        $sql = "UPDATE movies SET heading=:heading, subheading=:subheading, description=:description, storyline=:storyline, img=:img, link=:link, imdb_rating=:imdb_rating WHERE movie_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
             $stmt->bindParam("id", $id);
             $stmt->bindParam("heading", $movie->heading);
             $stmt->bindParam("subheading", $movie->subheading);
+			$stmt->bindParam("description", $movie->description);
             $stmt->bindParam("storyline", $movie->storyline);
             $stmt->bindParam("img", $movie->img);
             $stmt->bindParam("link", $movie->link);
-            $stmt->bindParam("commentsID", $movie->commentsID);
-            $stmt->bindParam("ratingID", $movie->ratingID);
+			$stmt->bindParam("imdb_rating", $movie->imdb_rating);
             $stmt->execute();
             $db = null;
             echo json_encode($movie);
@@ -118,9 +120,9 @@
         }
     }
 
-//$app->delete('movie/:id', deleteMovie);
+	//$app->delete('movie/:id', deleteMovie);
     function deleteMovie($id) {
-        $sql = "DELETE FROM movies WHERE id=:id";
+        $sql = "DELETE FROM movies WHERE movie_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -138,7 +140,7 @@
 // UPCOMING
 /* ************************************** */
 
-//$app->get('/upcoming', getUpcoming);
+	//$app->get('/upcoming', getUpcoming);
     function getUpcoming() {
         $sql = "SELECT * FROM upcoming";
         try {
@@ -152,7 +154,7 @@
         }
     }
 
-//$app->get('/upcoming/:id', getUpcomingId);
+	//$app->get('/upcoming/:id', getUpcomingId);
     function getUpcomingId($id) {
         $sql = "SELECT * FROM upcoming WHERE id=:id";
         try {
@@ -168,7 +170,7 @@
         }
     }
 
-//$app->post('/upcoming', addUpcoming);
+	//$app->post('/upcoming', addUpcoming);
     function addUpcoming() {
         $request = \Slim\Slim::getInstance()->request();
         $upcoming = json_decode($request->getBody());
@@ -190,7 +192,7 @@
         }
     }
 
-//$app->put('/upcoming/:id', updateUpcoming);
+	//$app->put('/upcoming/:id', updateUpcoming);
     function updateUpcoming($id) {
         $request = \Slim\Slim::getInstance()->request();
         $upcoming = json_decode($request->getBody());
@@ -212,7 +214,7 @@
         }
     }
 
-//$app->delete('upcoming/:id', deleteUpcoming);
+	//$app->delete('upcoming/:id', deleteUpcoming);
     function deleteUpcoming($id) {
         $sql = "DELETE FROM upcoming WHERE id=:id";
         try {
@@ -232,7 +234,7 @@
 // USERS
 /* ************************************** */
 
-//$app->get('/users', getUsers);
+	//$app->get('/users', getUsers);
     function getUsers() {
         $sql = "SELECT * FROM users";
         try {
@@ -246,9 +248,9 @@
         }
     }
 
-//$app->get('/user/:id', getUser);
+	//$app->get('/user/:id', getUser);
     function getUser($id) {
-        $sql = "SELECT * FROM users WHERE id=:id";
+        $sql = "SELECT * FROM users WHERE user_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -263,7 +265,7 @@
     }
 
 
-//$app->post('/user', addUser);
+	//$app->post('/user', addUser);
     function addUser() {
         $request = \Slim\Slim::getInstance()->request();
         $user = json_decode($request->getBody());
@@ -288,11 +290,11 @@
         }
     }
 
-//$app->put('/user/:id', updateUser);
+	//$app->put('/user/:id', updateUser);
     function updateUser($id) {
         $request = \Slim\Slim::getInstance()->request();
         $user = json_decode($request->getBody());
-        $sql = "UPDATE users SET name=:name, username=:username, password=:password, email=:email, notes=:notes, occupation=:occupation, gender=:gender, birthday=:birthday WHERE id=:id";
+        $sql = "UPDATE users SET name=:name, username=:username, password=:password, email=:email, gender=:gender, birthday=:birthday, registered=:registered, registered_id=:registered_id, approved=:approved, img=:img WHERE user_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -301,10 +303,12 @@
             $stmt->bindParam("username", $user->username);
             $stmt->bindParam("password", $user->password);
             $stmt->bindParam("email", $user->email);
-            $stmt->bindParam("notes", $user->notes);
-            $stmt->bindParam("occupation", $user->occupation);
             $stmt->bindParam("gender", $user->gender);
             $stmt->bindParam("birthday", $user->birthday);
+            $stmt->bindParam("registered", $user->registered);
+            $stmt->bindParam("registered_id", $user->registered_id);
+            $stmt->bindParam("approved", $user->approved);
+            $stmt->bindParam("img", $user->img);
             $stmt->execute();
             $db = null;
             echo json_encode($user);
@@ -313,9 +317,27 @@
         }
     }
 
-//$app->delete('/user/:id', deleteUser);
+    // $app->put('/userApp/:id', 'approveUser');
+    function approveUser($id) {
+        $request = \Slim\Slim::getInstance()->request();
+        $user = json_decode($request->getBody());
+        $sql = "UPDATE users SET approved = '1' WHERE user_id=:id";
+        try {
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam("id", $id);
+            $stmt->execute();
+            $db = null;
+            echo json_encode($user);
+        } catch (PDOException $e) {
+            echo '{"error":{"text":' . $e->getMessage() . '}}';
+        }
+    }
+
+
+	//$app->delete('/user/:id', deleteUser);
     function deleteUser($id) {
-        $sql = "DELETE FROM users WHERE id=:id";
+        $sql = "DELETE FROM users WHERE user_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -333,7 +355,7 @@
 // COMMENTS
 /* ************************************** */
 
-//$app->get('/comments', getComments);
+	//$app->get('/comments', getComments);
     function getComments() {
         $sql = "SELECT * FROM comments";
         try {
@@ -347,9 +369,9 @@
         }
     }
 
-//$app->get('/comment/:id', getComment);
+	//$app->get('/comment/:id', getComment);
     function getComment($id) {
-        $sql = "SELECT * FROM comments WHERE id=:id";
+        $sql = "SELECT * FROM comments WHERE comment_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -363,17 +385,20 @@
         }
     }
 
-//$app->put('/comment/:id', updateComment);
+	//$app->put('/comment/:id', updateComment);
     function updateComment($id) {
         $request = \Slim\Slim::getInstance()->request();
         $comment = json_decode($request->getBody());
-        $sql = "UPDATE comments SET ????? WHERE id=:id";
+        $sql = "UPDATE comments SET comment=:comment, movie_id=:movie_id, date=:date, timestamp=:timestamp, approved=:approved WHERE comment_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
             $stmt->bindParam("id", $id);
-            $stmt->bindParam("???", $comment->something);
-            // fill with more data once you get the info
+            $stmt->bindParam("comment", $comment->comment);
+            $stmt->bindParam("movie_id", $comment->movie_id);
+            $stmt->bindParam("date", $comment->date);
+            $stmt->bindParam("timestamp", $comment->timestamp);
+            $stmt->bindParam("approved", $comment->approved);
             $stmt->execute();
             $db = null;
             echo json_encode($comment);
@@ -382,16 +407,32 @@
         }
     }
 
-//$app->delete('/comment/:id', deleteComment);
-    function deleteComment($id) {
-        $sql = "DELETE FROM comments WHERE id=:id";
+	//$app->delete('/comment/:id/:reason', deleteComment);
+    function deleteComment($id, $reason) {
+        $sql = "DELETE FROM comments WHERE comment_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
             $stmt->bindParam("id", $id);
             $stmt->execute();
             $db = null;
-            echo true;
+            //echo true;
+            echo '{"success": {"text": "deleted"}}';
+        } catch (PDOException $e) {
+            echo '{"error": {"text": ' . $e->getMessage() . '}}';
+        }
+    }
+
+    function deleteRating($id) {
+        $sql = "DELETE FROM rating WHERE rating_id=:id";
+        try {
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam("id", $id);
+            $stmt->execute();
+            $db = null;
+            //echo true;
+            echo '{"success": {"text": ' . '"$reason"' . '}}';
         } catch (PDOException $e) {
             echo '{"error": {"text": ' . $e->getMessage() . '}}';
         }
@@ -402,9 +443,9 @@
 // RATINGS
 /* ************************************** */
 
-//$app->get('/ratings', getRatings);
+	//$app->get('/ratings', getRatings);
     function getRatings() {
-        $sql = "SELECT * FROM ratings";
+        $sql = "SELECT * FROM rating";
         try {
             $db = getConnection();
             $stmt = $db->query($sql);
