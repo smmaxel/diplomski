@@ -12,9 +12,9 @@
             }
         });
 
-    moviesController.$inject = ['$scope', '$log', 'requestService'];
+    moviesController.$inject = ['$scope', '$location', '$log', 'requestService'];
 
-    function moviesController($scope, $log, requestService) {
+    function moviesController($scope, $location, $log, requestService) {
 
         // initial values
         $scope.movies = [];
@@ -23,65 +23,52 @@
         $scope.currentPage = 1;
 
         // make a call to obtain movies
-        requestService.getMovies().then(
+        getMovies();
 
-            // success function
-            function(data) {
-                $log.debug('moviesController -> getMovies success', data);
-                $scope.movies = data.movies;
-                $scope.totalItems = $scope.movies.length;
-            },
+        /**
+         * Obtain movies and shows them in the UI
+         */
+        function getMovies() {
+            requestService.getMovies().then(
 
-            // error function
-            function() {
-                $log.debug('moviesController -> getMovies error');
-            }
-        );
+                // success function
+                function(data) {
+                    $log.debug('moviesController -> getMovies success', data);
+                    $scope.movies = data.movies;
+                    $scope.totalItems = $scope.movies.length;
+                },
 
-        // create specific call for obtaining single movie (when editing)
-        // TODO: refactor to use real value once edit field is clicked
-        requestService.getMovieByID('1').then(
+                // error function
+                function() {
+                    $log.debug('moviesController -> getMovies error');
+                }
+            );
+        }
 
-            // success function
-            function(data) {
-                $log.debug('moviesController -> getMovieByID success', data);
-            },
+        $scope.addNewMovie = function() {
+            $location.path('/moviesNew');
+        };
 
-            // error function
-            function() {
-                $log.debug('moviesController -> getMovieByID error');
-            }
-        );
+        $scope.editMovie = function(movie_id) {
+            $location.path('/moviesEdit/' + movie_id);
+        };
 
-        // create specific call for saving single movie (updating)
-        // TODO: refactor and prepare payload to be save (see example from registering user on UI side)
-        /*requestService.saveMovie(payload).then(
+        $scope.deleteMovie = function(movie_id) {
+            requestService.deleteMovie(movie_id).then(
 
-            // success function
-            function(data) {
-                $log.debug('movieController -> saveMovie success', data);
-            },
+                // success function
+                function(data) {
+                    $log.debug('moviesController -> deleteMovie success', data);
+                    getMovies();
+                },
 
-            // error function
-            function() {
-                $log.debug('movieController -> saveMovie error');
-            }
-        );*/
+                // error function
+                function() {
+                    $log.debug('moviesController -> deleteMovie error');
+                }
 
-        // crate specific call for deleting single movie (deleting)
-        // TODO: refactor to use real value once the delete field is clicked
-        /*requestService.deleteMovie(id).then(
-
-            // success function
-            function(data) {
-                $log.debug('movieController -> deleteMovie success', data);
-            },
-
-            // error function
-            function() {
-                $log.debug('movieController -> deleteMovie error');
-            }
-        );*/
+            );
+        };
 
     }
 

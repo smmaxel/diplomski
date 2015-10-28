@@ -4,9 +4,9 @@
 
     angular.module('admin').controller('upcomingController', upcomingController);
 
-    upcomingController.$inject = ['$scope', '$log', 'requestService'];
+    upcomingController.$inject = ['$scope', '$location', '$log', 'toastr', 'requestService'];
 
-    function upcomingController($scope, $log, requestService) {
+    function upcomingController($scope, $location, $log, toastr, requestService) {
 
         // initial values
         $scope.upcomings = [];
@@ -14,42 +14,56 @@
         $scope.itemsPerPage = 10;
         $scope.currentPage = 1;
 
-        var id = 1;  // TODO: delete this and replace where needed whith real data
+        // make a call to obtain upcoming data
+        getUpcoming();
 
-        requestService.getUpcoming().then(
+        function getUpcoming() {
+            requestService.getUpcoming().then(
 
-            // success function
-            function(data) {
-                $log.debug('upcomingController -> getUpcoming success', data);
-                $scope.upcomings = data.upcoming;
-            },
+                // success function
+                function(data) {
+                    $log.debug('upcomingController -> getUpcoming success', data);
+                    $scope.upcomings = data.upcoming;
+                    $scope.totalItems = $scope.upcomings.length;
+                },
 
-            // error function
-            function() {
-                $log.debug('upcomingController -> geUpcoming error');
-            }
-        );
-
-        // crate a call to obtain only one upcoming
-        requestService.getUpcomingByID(id).then(
-
-            // success function
-            function(data) {
-                $log.debug('upcomingController -> getUpcomingByID success', data);
-            },
-
-            // error function
-            function() {
-                $log.debug('upcomingController -> getUpcomingByID error');
-            }
-        );
+                // error function
+                function() {
+                    $log.debug('upcomingController -> geUpcoming error');
+                }
+            );
+        }
 
 
-        // create a call to save new upcoming
 
-        // crate a call to update existing upcoming
 
-        // crate a call to delete existing upcoming
+        $scope.addNewUpcoming = function() {
+            $location.path('/upcomingNew');
+        };
+
+        $scope.editUpcoming = function(id) {
+            $location.path('/upcomingEdit/' + id);
+            /*console.log('edit upcoming under id ', id);*/
+        };
+
+        $scope.deleteUpcoming = function(id) {
+            console.log('delete upcoming under id ', id);
+            requestService.deleteUpcoming(id).then(
+
+                // success function
+                function(data) {
+                    $log.debug('upcomingController -> deleteUpcoming success', data);
+                    getUpcoming();
+                    toastr.success('Data successfully deleted!', 'Success');
+                },
+
+                // error function
+                function() {
+                    $log.debug('upcomingController -> deleteUpcoming error');
+                    toastr.error('Unexpected error has occurred!', 'Error');
+                }
+            );
+        };
 
     }
 

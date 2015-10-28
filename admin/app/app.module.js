@@ -6,10 +6,12 @@
         'ngRoute',
         'ngSanitize',
         'angular-loading-bar',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'toastr'
+
     ])
     .constant('CONFIG', {
-        user : {}
+            userLogged: true
     })
 
     .config(function($logProvider){
