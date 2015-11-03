@@ -110,6 +110,29 @@
             captchaResponse = response;
         };
 
+
+        /**
+         * Upload file to server on select event
+         * @param file
+         */
+        $scope.upload = function (file) {
+            console.log('file je', file);
+
+            Upload.upload({
+                url: 'api/upload.php',
+                method: 'POST',
+                file: file,
+                sendFieldsAs: 'form'
+            }).then(function (resp) {
+                console.log('Success ' + resp.config.data + 'uploaded. Response: ' + resp.data);
+            }, function (resp) {
+                console.log('Error status: ' + resp.status);
+            }, function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                console.log('progress: ' + progressPercentage + '% ' + evt.config.data);
+            });
+        };
+
         /**
          * Adds new user
          */
@@ -121,12 +144,12 @@
                 var userData = {
                     name: $scope.name,
                     username: $scope.username,
+                    
                     password: $scope.password,
                     email: $scope.email,
                     gender: $scope.gender,
                     birthday: $filter('date')($scope.birthday, 'd/M/yyyy'),
-                    gRecaptcha: vcRecaptchaService.getResponse(),
-                    img: $scope.picture || ''
+                    gRecaptcha: vcRecaptchaService.getResponse()
                 };
 
                 console.log('detailed userData', userData);
@@ -148,6 +171,8 @@
                         toastr.error('An error while registering has occurred!', 'Error');
                     }
                 );
+
+
             }
         }
 
