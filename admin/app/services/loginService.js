@@ -18,7 +18,7 @@
 
             var deferred = $q.defer();
 
-            var url = 'app/data/user.php';
+            var url = 'data/user.php';
 
             $http({
                 method: 'POST',
@@ -49,7 +49,7 @@
 
             var deferred = $q.defer();
 
-            var url = 'app/data/destroy_session.php';
+            var url = 'data/destroy_session.php';
 
             $http({
                 method: 'POST',
@@ -80,7 +80,7 @@
 
             var deferred = $q.defer();
 
-            var url = 'app/data/check_session.php';
+            var url = 'data/check_session.php';
 
             $http({
                 method: 'POST',
