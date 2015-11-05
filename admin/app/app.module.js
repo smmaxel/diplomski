@@ -11,7 +11,7 @@
 
     ])
     .constant('CONFIG', {
-            userLogged: true
+            userLogged: false
     })
 
     .config(function($logProvider){
