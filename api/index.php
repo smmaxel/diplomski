@@ -245,14 +245,6 @@
         //send the message
         $mail->send();
         
-        // logic for image
-        $upload_dir = "../data/uploads";
-        $image_path = $upload_dir . "/default.png";
-        if ($user->img !== '') {
-            //$tmp_name = $_FILES["$user->img"]
-            //echo (json_encode($user->img));
-            //printf($user->img);
-        }
         $sql = 'INSERT INTO users (user_id, name, username, password, email, gender, birthday, registered, registered_id, approved, img) VALUES (NULL, :name, :username, :password, :email, :gender, :birthday, "'.$timestamp.'", "'.$register_id.'", "0", :img)';
         try {
             $db = getConnection();

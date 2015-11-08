@@ -14,11 +14,20 @@
             emailState: 0
         };
 
+        // Progress bar visible
+        $scope.uploadStatus = {
+            progressBarVisible: false,
+            progressBarValue: 0
+        };
+
         // Starting date
         $scope.birthday = '1990-01-01';
 
         // Captcha success response (not a robot)
         var captchaResponse = null;
+
+        // Uploaded image URL
+        var uploadImage = null;
 
         /**
          * Funciton used to validate both Username and Email
@@ -94,15 +103,6 @@
         }
 
         /**
-         * Upload a user profile picture
-         * @param file
-         */
-        /*$scope.uploadPicture = function(file) {
-            $scope.pictureFile = file;
-        };*/
-
-
-        /**
          * Captcha set response (not a robot)
          * @param response
          */
@@ -110,27 +110,40 @@
             captchaResponse = response;
         };
 
-
         /**
          * Upload file to server on select event
          * @param file
          */
         $scope.upload = function (file) {
-            console.log('file je', file);
 
-            Upload.upload({
-                url: 'api/upload.php',
-                method: 'POST',
-                file: file,
-                sendFieldsAs: 'form'
-            }).then(function (resp) {
-                console.log('Success ' + resp.config.data + 'uploaded. Response: ' + resp.data);
-            }, function (resp) {
-                console.log('Error status: ' + resp.status);
-            }, function (evt) {
-                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                console.log('progress: ' + progressPercentage + '% ' + evt.config.data);
-            });
+            $scope.uploadStatus.progressBarValue = 0;
+            uploadImage = null;
+
+            if (file === null) {
+                $scope.uploadStatus.progressBarVisible = false;
+            } else {
+
+                $scope.uploadStatus.progressBarVisible = true;
+
+                Upload.upload({
+                    url: 'api/upload.php',
+                    method: 'POST',
+                    file: file,
+                    sendFieldsAs: 'form'
+                }).then(function (resp) {
+                    // console.log('Success ' + resp.config.data + 'uploaded. Response: ' + resp.data);
+                    uploadImage = resp.data.success.text;
+                    $scope.uploadStatus.progressBarVisible = false;
+                    toastr.success('Image successfully uploaded', 'Success');
+                }, function (resp) {
+                    // console.log('Error status: ' + resp.status);
+                    toastr.error('Image upload error! Available formats are .jpg, .png and .gif.', 'Error');
+                }, function (evt) {
+                    $scope.uploadStatus.progressBarValue = parseInt(100.0 * evt.loaded / evt.total);
+                    //var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    //console.log('progress: ' + progressPercentage + '% ' + evt.config.data);
+                });
+            }
         };
 
         /**
@@ -149,10 +162,9 @@
                     email: $scope.email,
                     gender: $scope.gender,
                     birthday: $filter('date')($scope.birthday, 'd/M/yyyy'),
-                    gRecaptcha: vcRecaptchaService.getResponse()
+                    gRecaptcha: vcRecaptchaService.getResponse(),
+                    img: uploadImage
                 };
-
-                console.log('detailed userData', userData);
 
                 requestService.addUser(userData).then(
 
@@ -161,11 +173,10 @@
                         $log.debug('registerController -> addUser success', data);
                         toastr.info('Please check your email address for confirmation email!', 'Note');
                         toastr.success('Successfully Registered! You will be redirected to login page.', 'Success');
-                        //$timeout(function() { $location.path('/login'); }, 8000);
+                        $timeout(function() { $location.path('/login'); }, 8000);
                     },
 
-
-                    // error function/
+                    // error function
                     function() {
                         $log.debug('registerController -> addUser error');
                         toastr.error('An error while registering has occurred!', 'Error');

@@ -142,3 +142,10 @@ input[type=file] {
     border: none;
     padding: 25px;
 }
+
+/* Progress bar on register page */
+.progresRegister {
+    width: 250px;
+    margin-top: 2px;
+    position: absolute;
+}
