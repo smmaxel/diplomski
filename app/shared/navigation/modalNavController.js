@@ -2,11 +2,19 @@
 
     'use strict';
 
-    angular.module('myapp').controller('ModalInstanceNavCtrl', function ($scope, $log, $sce, $modalInstance, toastr, requestService, CONFIG) {
+    angular.module('myapp').controller('ModalInstanceNavCtrl', function ($scope, $log, $sce, $modalInstance, Upload, toastr, requestService, CONFIG) {
 
         $scope.states = {
             emailState: 0
         };
+
+        // Progress bar visible
+        $scope.uploadStatus = {
+            progressBarVisible: false,
+            progressBarValue: 0
+        };
+
+        var uploadImage = null;
 
         // email check on the backend
         /**
@@ -50,7 +58,7 @@
                 var updateData = {
                     password: $scope.password || null,
                     email: $scope.email || null,
-                    img: $scope.picture || null
+                    img: uploadImage || null
                 };
 
                 requestService.updateUser(updateData).then(
@@ -76,7 +84,41 @@
 
         };
 
-        // logic for image upload
+        /**
+         * Upload file to server on select event
+         * @param file
+         */
+        $scope.upload = function (file) {
+
+            $scope.uploadStatus.progressBarValue = 0;
+            uploadImage = null;
+
+            if (file === null) {
+                $scope.uploadStatus.progressBarVisible = false;
+            } else {
+
+                $scope.uploadStatus.progressBarVisible = true;
+
+                Upload.upload({
+                    url: 'api/upload.php',
+                    method: 'POST',
+                    file: file,
+                    sendFieldsAs: 'form'
+                }).then(function (resp) {
+                    // console.log('Success ' + resp.config.data + 'uploaded. Response: ' + resp.data);
+                    uploadImage = resp.data.success.text;
+                    $scope.uploadStatus.progressBarVisible = false;
+                    toastr.success('Image successfully uploaded', 'Success');
+                }, function (resp) {
+                    // console.log('Error status: ' + resp.status);
+                    toastr.error('Image upload error! Available formats are .jpg, .png and .gif.', 'Error');
+                }, function (evt) {
+                    $scope.uploadStatus.progressBarValue = parseInt(100.0 * evt.loaded / evt.total);
+                    //var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    //console.log('progress: ' + progressPercentage + '% ' + evt.config.data);
+                });
+            }
+        };
 
     });
 

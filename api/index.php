@@ -277,6 +277,7 @@
         $sqlSET = "";
 
         if (isset($user->password)) {
+            $user->password = md5($user->password);
             $sqlSET = $sqlSET . ", password=:password";
         }
 
@@ -308,7 +309,7 @@
                     $stmt->bindParam("email", $user->email);    
                 }
                 if (isset($user->img)) {
-                    //$stmt->bindParam("img", $user->img);    
+                    $stmt->bindParam("img", $user->img);    
                 }
                 $stmt->execute();
                 $db = null;
