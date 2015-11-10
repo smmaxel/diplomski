@@ -86,8 +86,8 @@
 
         <!-- Comment -->
         <div class="media" ng-repeat="comment in movieComments" ng-show="movieComments.length !== 0">
-            <a class="pull-left" href="#">
-                <img class="media-object" src="http://placehold.it/64x64" alt="">
+            <a style="cursor:default" class="pull-left" href="">
+                <img class="media-object" ng-src="{{ comment.img }}">
             </a>
             <div class="media-body">
                 <h4 class="media-heading">{{ comment.name }}

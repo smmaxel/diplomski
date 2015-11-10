@@ -45,8 +45,8 @@
 /* Login background and form */
 .loginBackgroundImage {
     background: url("../../data/login.jpg") no-repeat;
-    width: 100%;
-    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
     background-size: 100% 100%;
     position: absolute;
 }
@@ -102,8 +102,8 @@
 /* Register background and form */
 .registerBackgroundImage {
     background: url("../../data/register.jpg") no-repeat;
-    width: 100%;
-    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
     background-size: 100% 100%;
     position: absolute;
 }
@@ -141,4 +141,11 @@ input[type=file] {
     background: rgba(0,0,0,.85);
     border: none;
     padding: 25px;
+}
+
+/* Progress bar on register page */
+.progresRegister {
+    width: 250px;
+    margin-top: 2px;
+    position: absolute;
 }
