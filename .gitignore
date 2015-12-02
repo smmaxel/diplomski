@@ -1,3 +1,5 @@
 # Workspace data #
 
 .idea/
+data/uploads/**.*
+temp/**.*
