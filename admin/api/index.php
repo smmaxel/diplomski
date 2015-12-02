@@ -1,6 +1,7 @@
 <?php
 
-	require 'Slim/Slim.php';
+	require 'PHPMailer/PHPMailerAutoload.php';
+    require 'Slim/Slim.php';
 	\Slim\Slim::registerAutoloader();
 
 	$app = new \Slim\Slim();
@@ -409,6 +410,74 @@
 
 	//$app->delete('/comment/:id/:reason', deleteComment);
     function deleteComment($id, $reason) {
+
+        // obtain user id and via ID get the user email
+        $user_sql = 'SELECT email FROM users, comments WHERE comments.comment_id = "' . $id . '" AND users.user_id = comments.user_id;';
+        $user_db = getConnection();
+        $user_stmt = $user_db->prepare($user_sql);
+        $user_stmt->execute();
+        $user_result = $user_stmt->fetchObject();
+        $user_db = null;
+        $user_email = $user_result->email;
+
+        // Create a new PHPMailer instance
+        $mail = new PHPMailer;
+        // Tell PHPMailer to use SMTP
+        $mail->isSMTP();
+
+        // Enable SMTP debugging
+        // 0 = off (for production use)
+        // 1 = client messages
+        // 2 = client and server messages
+        $mail->SMTPDebug = 0;
+
+        // Set the hostname of the mail server
+        $mail->Host = 'smtp.gmail.com';
+        // Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
+        $mail->Port = 587;
+        // Set the encryption system to use - ssl (deprecated) or tls
+        $mail->SMTPSecure = 'tls';
+        // Whether to use SMTP authentication
+        $mail->SMTPAuth = true;
+
+        //Username to use for SMTP authentication - use full email address for gmail
+        $mail->Username = "auto.responder.moviereview@gmail.com";
+        //Password to use for SMTP authentication
+        $mail->Password = "Marko022";
+
+        //Set who the message is to be sent from
+        $mail->setFrom('auto.responder.moviereview@gmail.com', 'Movie Review');
+        //Set who the message is to be sent to
+        $mail->addAddress($user_email);
+        //Set the subject line
+        $mail->Subject = 'Movie Review Verification';
+
+        // switch case for different messages
+        $rejectMsg = '';
+        switch ($reason) {
+            case 'in':
+                // inappropriate
+                $rejectMsg = 'Your comment contains inappropriate content.';
+                break;
+
+            case 'ra':
+                // rasist
+                $rejectMsg = 'Your comment contains rasist content.';
+                break;
+
+            case 'cu':
+                // curses
+                $rejectMsg = 'Your comment contains curses.';
+                break;
+
+            default: break;
+        }
+        
+        $content = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Movie Review Rejection</title></head><body style="margin:0"><div style="width: 100%; height: 50px; background-color: #222"><a style="float: left; font-family: sans-serif; color: #e5e5e5; height: 50px; padding: 15px 15px; font-size: 18px; line-height: 20px; text-decoration: none;" href="#/home">Movie Review</a></div><h3 style="color:#212121;font-family:sans-serif;font-size:30px;font-weight:100;padding-bottom:10px;margin-left:10px;">Your comment has been rejected!</h3><p style="color:#484848;font-family:sans-serif;font-size:14px;font-weight:100;margin-left:10px;">Reason: <b>' . $rejectMsg . '</b></p></body></html>';
+        $mail->msgHTML($content);
+        //send the message
+        $mail->send();
+
         $sql = "DELETE FROM comments WHERE comment_id=:id";
         try {
             $db = getConnection();
@@ -431,7 +500,6 @@
             $stmt->bindParam("id", $id);
             $stmt->execute();
             $db = null;
-            //echo true;
             echo '{"success": {"text": ' . '"$reason"' . '}}';
         } catch (PDOException $e) {
             echo '{"error": {"text": ' . $e->getMessage() . '}}';
