@@ -9,9 +9,9 @@
         };
     });
 
-    homeController.$inject = ['$scope', '$log', 'requestService'];
+    homeController.$inject = ['$scope', '$log', '$timeout', 'requestService', 'CONFIG'];
 
-    function homeController($scope, $log, requestService) {
+    function homeController($scope, $log, $timeout, requestService, CONFIG) {
 
         // Values used in carousel
         $scope.myInterval = 5000;
@@ -40,6 +40,19 @@
             upcomingDescription: 'Upcoming section contains list of movies ordered by the days left till release date. All information are shown inside the dataTable which allows easier manipulation and filtering of the movie data.',
             aboutDescription: 'In About section you will find all the necessary information about the project and used technologies. Also links to all used tutorials and support are provided.'
         };
+
+        $scope.isRegisteredVisiable = false;
+        checkForChange();
+
+        /**
+         * Function for watching onChange
+         */
+        function checkForChange() {
+            $timeout(function() {
+                $scope.isRegisteredVisiable =  CONFIG.userLogged ? false : true;
+                checkForChange();
+            }, 1000);
+        }
 
     }
 
