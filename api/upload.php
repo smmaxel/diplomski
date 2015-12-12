@@ -57,5 +57,5 @@ try {
 
 	
 } catch(RuntimeException $e) {
-	echo '{"error": {"text":' . $e->getMessage() . '}}';
+	echo '{"error": {"text": "' . $e->getMessage() . '" }}';
 }

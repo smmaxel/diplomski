@@ -47,7 +47,7 @@
                     <label class="col-sm-2 control-label registerText">Picture</label>
                     <div class="col-sm-9">
                         <input type="file" ngf-select="upload($file)" ng-model="picture" name="image" accept="image/*" ngf-max-size="2MB" popover="Not required!" popover-trigger="mouseenter" popover-placement="bottom" />
-                        <p ng-show="userForm.file.$error.maxSize" class="help-block" style="color: #a94442">File too large {{picture.size / 1000000|number:1}}MB: max {{picture.$errorParam}}</p>
+                        <p ng-show="userForm.image.$error.maxSize" class="help-block" style="color: #a94442">File too large {{picture.size / 1000000|number:1}}MB: max {{picture.$errorParam}}</p>
                         <div class="progresRegister" ng-show="uploadStatus.progressBarVisible"><progressbar class="progress-striped active" max="100" value="uploadStatus.progressBarValue"><i>{{ uploadStatus.progressBarValue }}%</i></progressbar></div>
                         <div><img ng-show="userForm.image.$valid" ngf-src="!picture.$error && picture" class="thumb"></div>
                     </div>
