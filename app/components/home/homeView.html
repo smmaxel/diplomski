@@ -64,7 +64,7 @@
             <h2 class="page-header">Recently Added Movies</h2>
         </div>
         <div class="col-md-4 col-sm-6" ng-repeat="movie in movies | limitTo:6">
-            <a href="#/movies">
+            <a ng-href="#/movieComments/{{movie.movie_id}}">
                 <img class="img-responsive img-portfolio img-hover" ng-src="{{movie.img}}" alt="">
             </a>
         </div>
