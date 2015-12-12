@@ -132,12 +132,17 @@
                     sendFieldsAs: 'form'
                 }).then(function (resp) {
                     // console.log('Success ' + resp.config.data + 'uploaded. Response: ' + resp.data);
-                    uploadImage = resp.data.success.text;
-                    $scope.uploadStatus.progressBarVisible = false;
-                    toastr.success('Image successfully uploaded', 'Success');
+                    if (resp.data.error) {
+                        $scope.uploadStatus.progressBarVisible = false;
+                        toastr.error(resp.data.error.text, 'Error');
+                    } else {
+                        uploadImage = resp.data.success.text;
+                        $scope.uploadStatus.progressBarVisible = false;
+                        toastr.success('Image successfully uploaded', 'Success');
+                    }
                 }, function (resp) {
                     // console.log('Error status: ' + resp.status);
-                    toastr.error('Image upload error! Available formats are .jpg, .png and .gif.', 'Error');
+                    toastr.error('Image upload error!', 'Error');
                 }, function (evt) {
                     $scope.uploadStatus.progressBarValue = parseInt(100.0 * evt.loaded / evt.total);
                     //var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
