@@ -64,7 +64,7 @@
             <h2 class="page-header">Recently Added Movies</h2>
         </div>
         <div class="col-md-4 col-sm-6" ng-repeat="movie in movies | limitTo:6">
-            <a href="#/movies">
+            <a ng-href="#/movieComments/{{movie.movie_id}}">
                 <img class="img-responsive img-portfolio img-hover" ng-src="{{movie.img}}" alt="">
             </a>
         </div>
@@ -97,18 +97,20 @@
     <hr>
 
     <!-- Call to Action Section -->
-    <div class="well">
-        <div class="row">
-            <div class="col-md-8">
-                <p>Please register in order to use all features that are available on this site. Features such as comments and subscription of the topic movies are only available to the registered users. </p>
-            </div>
-            <div class="col-md-4">
-                <a class="btn btn-lg btn-default btn-block" href="#/register">Click to Register</a>
+    <div ng-show="isRegisteredVisiable">
+        <div class="well">
+            <div class="row">
+                <div class="col-md-8">
+                    <p>Please register in order to use all features that are available on this site. Features such as comments and subscription of the topic movies are only available to the registered users. </p>
+                </div>
+                <div class="col-md-4">
+                    <a class="btn btn-lg btn-default btn-block" href="#/register">Click to Register</a>
+                </div>
             </div>
         </div>
-    </div>
 
-    <hr>
+        <hr>
+    </div>
 
     <!-- Footer -->
     <div ng-include src="'app/shared/footer/footer.html'"></div>
