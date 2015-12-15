@@ -42,8 +42,11 @@
         <div class="col-md-4">
             <div class="well">
                 <h4>Movie Rating</h4>
-                <span style="font-size: 20px"><rating ng-model="movie.rating" max="10" readonly="true"></rating></span>
-                <p>Ratings: {{ movie.rating }}/10</p>
+                <p>IMDB rating: {{ movie.imdb_rating }}/10</p>
+                <p>Users rating: {{ movieRating || 0 | number:1 }}/10 <small>({{ movieRatingVotes }} votes)</small></p>
+                <div ng-show="leaveComment">
+                    <p>Your rating: <span style="font-size: 20px; position: absolute; margin-left: 5px;"><rating ng-model="userRating" ng-click="saveRating()" max="10" readonly="false"></rating></span></p>
+                </div>
             </div>
         </div>
     </div>

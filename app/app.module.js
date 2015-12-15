@@ -10,7 +10,8 @@
         'angular-loading-bar',
         'ui.bootstrap',
         'ngFileUpload',
-        'vcRecaptcha'
+        'vcRecaptcha',
+        'map'
     ])
     .constant('CONFIG', {
         userLogged : false,
