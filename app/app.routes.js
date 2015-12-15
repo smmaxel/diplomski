@@ -12,48 +12,23 @@
 
             .when('/home', {
                 templateUrl: 'app/components/home/homeView.html',
-                controller: 'homeController',
-                resolve: {
-                    auth: function (AuthService) {
-                        AuthService.checkAuth();
-                    }
-                }
+                controller: 'homeController'
             })
             .when('/movies', {
                 templateUrl: 'app/components/movies/moviesView.html',
-                controller: 'moviesController',
-                resolve: {
-                    auth: function (AuthService) {
-                        AuthService.checkAuth();
-                    }
-                }
+                controller: 'moviesController'
             })
             .when('/movieComments/:movieId', {
                 templateUrl: 'app/components/movie-comments/movieComments.html',
-                controller: 'movieCommentsController',
-                resolve: {
-                    auth: function (AuthService) {
-                        AuthService.checkAuth();
-                    }
-                }
+                controller: 'movieCommentsController'
             })
             .when('/upcoming', {
                 templateUrl: 'app/components/upcoming/upcomingView.html',
-                controller: 'upcomingController',
-                resolve: {
-                    auth: function (AuthService) {
-                        AuthService.checkAuth();
-                    }
-                }
+                controller: 'upcomingController'
             })
             .when('/about', {
                 templateUrl: 'app/components/about/aboutView.html',
-                controller: 'aboutController',
-                resolve: {
-                    auth: function (AuthService) {
-                        AuthService.checkAuth();
-                    }
-                }
+                controller: 'aboutController'
             })
             .when('/login', {
                 templateUrl: 'app/components/login/login.html',
