@@ -10,17 +10,8 @@
              * Check if user has the Auth
              */
             function checkAuth() {
-                if (CONFIG.user) {
-                    var user = CONFIG.user;
-                    if (user.name && user.username && user.password) {
-                        if ($location.path() == '/login' || $location.path() == '/register') {
-                            //$location.path('/home');
-                        } else {
-                            //$location.path();
-                        }
-                    } else {
-                        //$location.path('/login');
-                    }
+                if (CONFIG.userLogged) {
+                    $location.path('/home');
                 }
             }
 
