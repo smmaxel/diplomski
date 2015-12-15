@@ -96,7 +96,7 @@
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
-            $stmt = $bindParam("id", $id);
+            $stmt->bindParam("id", $id);
             $stmt->execute();
             $ratings = $stmt->fetchAll(PDO::FETCH_OBJ);
             $db = null;
@@ -116,10 +116,10 @@
             $username = $_SESSION['username'];
         }
         
-        $user_sql = 'SELECT user_id FROM users WHERE username = "' . $username . '"';
+        $user_sql = 'SELECT user_id FROM users WHERE username = :username';
         $user_db = getConnection();
         $user_stmt = $user_db->prepare($user_sql);
-        $user_stmt->bindParam("username", $comment->user);
+        $user_stmt->bindParam("username", $username);
         $user_stmt->execute();
         $user_result = $user_stmt->fetchObject();
         $user_db = null;
@@ -325,6 +325,21 @@
         $request = \Slim\Slim::getInstance()->request();
         $rating = json_decode($request->getBody());
 
+        // get user id
+
+        $user_sql = 'SELECT user_id FROM users WHERE username = "' . $_SESSION['username'] . '"';
+        $user_db = getConnection();
+        $user_stmt = $user_db->prepare($user_sql);
+        //$user_stmt->bindParam("username", $username);
+        $user_stmt->execute();
+        $user_result = $user_stmt->fetchObject();
+        $user_db = null;
+        $user_id = $user_result->user_id;
+
+
+        // check weither that user already exists inside rating datatable ()
+        $exist_sql = '';
+
 
 
         // movie_id
@@ -335,7 +350,9 @@
 
         // get the logged user id
 
-        $sql = 'INSERT INTO rating ()'
+        $sqlPOST = 'INSERT INTO rating (rating_id, movie_id, user_id, rating) VALUES (NULL, :movieId, :userId, :rating))';
+        $sqlGET = 'UPDATE rating SET rating = :rating WHERE user_id = :userId';
+
     }
 
     /**

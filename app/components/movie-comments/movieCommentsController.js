@@ -55,9 +55,7 @@
             );
         }
 
-        /**
-         *
-         */
+        //
         function getMovieRatings() {
             requestService.getMovieRatings($routeParams.movieId).then(
 
@@ -73,9 +71,7 @@
             );
         }
 
-        /**
-         *
-         */
+        //
         function getMovieUserRating() {
             requestService.getMovieUserRating().then(
 
@@ -92,6 +88,7 @@
             );
         }
 
+        //
         function saveMovieUserRating() {
             requestService.saveMovieUserRating().then(
 
