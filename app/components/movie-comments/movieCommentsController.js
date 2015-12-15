@@ -55,6 +55,58 @@
             );
         }
 
+        /**
+         *
+         */
+        function getMovieRatings() {
+            requestService.getMovieRatings($routeParams.movieId).then(
+
+                // success function
+                function(data) {
+                    $log.debug('movieCommentsController -> getMovieRatings success', data);
+                },
+
+                // error function
+                function() {
+                    $log.debug('movieCommentsController -> getMovieRatings error');
+                }
+            );
+        }
+
+        /**
+         *
+         */
+        function getMovieUserRating() {
+            requestService.getMovieUserRating().then(
+
+                // success function
+                function(data) {
+                    $log.debug('movieCommentsController -> getMovieUserRating success', data);
+                },
+
+                // error function
+                function() {
+                    $log.debug('movieCommentsController -> getMovieUserRating error');
+                }
+
+            );
+        }
+
+        function saveMovieUserRating() {
+            requestService.saveMovieUserRating().then(
+
+                // success function
+                function(data) {
+                    $log.debug('movieCommentsController -> saveMovieUserRating success', data);
+                },
+
+                // error function
+                function() {
+                    $log.debug('movieCommentsController -> saveMovieUserRating error');
+                }
+            );
+        }
+
         // Save the entered movie comment
         $scope.commentSubmit = function() {
             if ($scope.leaveComment) {

@@ -13,6 +13,9 @@
     $app->get('/movies', 'getMovies');
     $app->get('/movie/:id', 'getMovie');
     $app->get('/comments/:id', 'getComments');
+    $app->get('/ratings/:id', 'getRatings');
+    $app->get('/rating', 'getRating');
+    $app->post('/rating', 'addRating');
     $app->get('/upcoming', 'getUpcoming');
     $app->get('/users', 'getUsers');
     $app->get('/register/:id', 'registerUser');
@@ -31,7 +34,7 @@
      * Method: GET
      */
     function getMovies() {
-        $sql = "SELECT * FROM movies, rating WHERE movies.movie_id = rating.movie_id";
+        $sql = "SELECT * FROM movies";
         try {
             $db = getConnection();
             $stmt = $db->query($sql);
@@ -49,7 +52,7 @@
      * @param $id
      */
     function getMovie($id) {
-        $sql = "SELECT * FROM movies, rating WHERE movies.movie_id=:id AND movies.movie_id = rating.movie_id";
+        $sql = "SELECT * FROM movies WHERE movies.movie_id=:id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -78,6 +81,58 @@
             $comments = $stmt->fetchAll(PDO::FETCH_OBJ);
             $db = null;
             echo '{"comments": ' . json_encode($comments) . '}';
+        } catch (PDOException $e) {
+            echo '{"error": {"text": ' . $e->getMessage() . '}}';
+        }
+    }
+
+    /**
+     * Get the specific Movie Ratings from the database based on ID
+     * http://www.yourwebsite.com/api/ratings/id
+     * @param $id
+     */
+    function getRatings($id) {
+        $sql = "SELECT * FROM rating WHERE movie.id = :id";
+        try {
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt = $bindParam("id", $id);
+            $stmt->execute();
+            $ratings = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $db = null;
+            echo '{"ratings":' . json_encode($ratings) . '}';
+        } catch (PDOException $e) {
+            echo '{"error": {"text": ' . $e->getMessage() . '}}';
+        }
+    }
+
+    /**
+     * Get the specific Movie Ratings for logged user from the database 
+     * http://www.yourwebsite.com/api/rating/
+     */
+    function getRating() {
+        $username = '';
+        if (isset($_SESSION['username'])) {
+            $username = $_SESSION['username'];
+        }
+        
+        $user_sql = 'SELECT user_id FROM users WHERE username = "' . $username . '"';
+        $user_db = getConnection();
+        $user_stmt = $user_db->prepare($user_sql);
+        $user_stmt->bindParam("username", $comment->user);
+        $user_stmt->execute();
+        $user_result = $user_stmt->fetchObject();
+        $user_db = null;
+        $user_id = $user_result->user_id;
+
+        $sql = 'SELECT rating FROM rating WHERE rating.user_id = "' . $user_id . '"';
+        try {
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            $userRating = $stmt->fetchObject();
+            $db = null;
+            echo '{"user_rating":' . json_encode($userRating) . '}';
         } catch (PDOException $e) {
             echo '{"error": {"text": ' . $e->getMessage() . '}}';
         }
@@ -263,6 +318,24 @@
         } catch (PDOException $e) {
             echo '{"error":{"text":' . $e->getMessage() . '}}';
         }
+    }
+
+    
+    function addRating() {
+        $request = \Slim\Slim::getInstance()->request();
+        $rating = json_decode($request->getBody());
+
+
+
+        // movie_id
+        // rating
+
+        // if user_id is not present in rating table use POST method
+        // if user_id already exists in rating table use PUT method
+
+        // get the logged user id
+
+        $sql = 'INSERT INTO rating ()'
     }
 
     /**
