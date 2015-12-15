@@ -7,7 +7,7 @@
         $routeProvider
 
             .otherwise({
-                redirectTo: '/dashboard'
+                redirectTo: '/movies'
             })
 
             .when('/login', {

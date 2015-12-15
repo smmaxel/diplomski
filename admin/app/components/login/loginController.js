@@ -29,7 +29,7 @@
                             toastr.error('Your credentials are invalid!', 'Error');
                         } else {
                             CONFIG.userLogged = true;
-                            $location.path('/dashboard');
+                            $location.path('/movies');
                         }
                     },
 

@@ -41,6 +41,38 @@
         }
 
         /**
+         * Used for obtaining all ratings for particular movie by its ID
+         * @param id
+         * @returns {promise}
+         */
+        function getMovieRatings(id) {
+            $log.debug('requestService -> getMovieRatings');
+            var urlPath = 'ratings/' + id;
+            return endpointService.getServerRequest(urlPath);
+        }
+
+        /**
+         * Used for obtaining rating for particular active (Logged) user
+         * @returns {promise}
+         */
+        function getMovieUserRating() {
+            $log.debug('requestService -> getMovieUserRating');
+            var urlPath = 'rating';
+            return endpointService.getServerRequest(urlPath);
+        }
+
+        /**
+         * Used for saving and updating user's Movie rating
+         * @param data
+         * @returns {promise}
+         */
+        function saveMovieUserRating(data) {
+            $log.debug('requestService -> saveMovieUserRating');
+            var urlPath = 'rating';
+            return endpointService.postServerRequest(urlPath, data);
+        }
+
+        /**
          * Used for saving new comments
          * @param data
          * @returns {promise}
@@ -141,6 +173,9 @@
             getMovies: getMovies,
             getMovieByID: getMovieByID,
             getMovieCommentsByID: getMovieCommentsByID,
+            getMovieRatings: getMovieRatings,
+            getMovieUserRating: getMovieUserRating,
+            saveMovieUserRating: saveMovieUserRating,
             addMovieComment: addMovieComment,
             getUpcoming: getUpcoming,
             getUsers: getUsers,
