@@ -43,10 +43,10 @@
             <div class="well">
                 <h4>Movie Rating</h4>
                 <p>IMDB rating: {{ movie.imdb_rating }}/10</p>
-                <p>Users rating: 4/10 <small>(1 votes)</small></p>
-                <!--<p>Your rating: <span style="font-size: 20px"><rating ng-model="4" max="10" readonly="true"></rating></span></p>-->
-                <!--<span style="font-size: 20px"><rating ng-model="movie.rating" max="10" readonly="true"></rating></span>-->
-                <!--<p>Ratings: {{ movie.rating }}/10</p>-->
+                <p>Users rating: {{ movieRating || 0 | number:1 }}/10 <small>({{ movieRatingVotes }} votes)</small></p>
+                <div ng-show="leaveComment">
+                    <p>Your rating: <span style="font-size: 20px; position: absolute; margin-left: 5px;"><rating ng-model="userRating" ng-click="saveRating()" max="10" readonly="false"></rating></span></p>
+                </div>
             </div>
         </div>
     </div>

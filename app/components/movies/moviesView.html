@@ -24,7 +24,7 @@
                     <img class="img-responsive img-hover" ng-src="{{ movie.img }}" alt="">
                 </a>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-5" style="margin-bottom: 70px;">
                 <h3>{{ movie.heading }}</h3>
                 <h4>{{ movie.subheading }}</h4>
                 <p>{{ movie.description }}</p>
@@ -32,8 +32,8 @@
                 <a class="btn btn-primary" ng-click="movieComments(movie.movie_id);">View Comments</i></a>
                 <br />
                 <span style="margin-top: 20px; position: absolute">
-                    <rating style="font-size: 20px;" ng-model="movie.rating" max="10" readonly="true"></rating>
-                    <p>Rating: {{ movie.rating }}/10</p>
+                    <p>IMDB Rating: {{ movie.imdb_rating }}/10</p>
+                    <rating style="font-size: 20px;" ng-model="movie.imdb_rating" max="10" readonly="true"></rating>
                 </span>
 
             </div>

@@ -92,7 +92,7 @@
      * @param $id
      */
     function getRatings($id) {
-        $sql = "SELECT * FROM rating WHERE movie.id = :id";
+        $sql = "SELECT * FROM rating WHERE rating.movie_id = :id";
         try {
             $db = getConnection();
             $stmt = $db->prepare($sql);
@@ -320,39 +320,64 @@
         }
     }
 
-    
+    /**
+     * Add the new or update existing rating for particular user into the database
+     * http://www.yourwebsite.com/api/rating
+     * Method: POST
+     */
     function addRating() {
         $request = \Slim\Slim::getInstance()->request();
         $rating = json_decode($request->getBody());
 
-        // get user id
+        $username = '';
+        if (isset($_SESSION['username'])) {
+            $username = $_SESSION['username'];
+        }
 
-        $user_sql = 'SELECT user_id FROM users WHERE username = "' . $_SESSION['username'] . '"';
+        // obtain active user_id
+        $user_sql = 'SELECT user_id FROM users WHERE username = "' . $username . '"';
         $user_db = getConnection();
         $user_stmt = $user_db->prepare($user_sql);
-        //$user_stmt->bindParam("username", $username);
+        $user_stmt->bindParam("username", $username);
         $user_stmt->execute();
         $user_result = $user_stmt->fetchObject();
         $user_db = null;
         $user_id = $user_result->user_id;
 
+        // obtain info whether or not user already exists inside rating datatable
+        $exist_sql = 'SELECT * FROM rating WHERE rating.user_id = :user_id AND rating.movie_id = :movie_id';
+        $exist_db = getConnection();
+        $exist_stmt = $exist_db->prepare($exist_sql);
+        $exist_stmt->bindParam("user_id", $user_id);
+        $exist_stmt->bindParam("movie_id", $rating->movie_id);
+        $exist_stmt->execute();
+        $exist_result = $exist_stmt->fetch(PDO::FETCH_ASSOC);
+        $exist_db = null;
 
-        // check weither that user already exists inside rating datatable ()
-        $exist_sql = '';
+        try {
+            $db = getConnection();
+            if ($exist_result) {
+                $sqlPUT = 'UPDATE rating SET rating.rating = :rating WHERE rating.user_id = :user_id';
+                $stmt = $db->prepare($sqlPUT);
+                $stmt->bindParam("rating", $rating->rating);
+                $stmt->bindParam("user_id", $user_id);
+                $stmt->execute();
+                $db = null;
+                echo '{"text": "success"}';
+            } else {
+                $sqlPOST = 'INSERT INTO rating (rating_id, movie_id, user_id, rating) VALUES (NULL, :movie_id, :user_id, :rating)';
+                $stmt = $db->prepare($sqlPOST);
+                $stmt->bindParam("movie_id", $rating->movie_id);
+                $stmt->bindParam("user_id", $user_id);
+                $stmt->bindParam("rating", $rating->rating);
+                $stmt->execute();
+                $db = null;
+                echo '{"text": "success"}';
+            }
 
-
-
-        // movie_id
-        // rating
-
-        // if user_id is not present in rating table use POST method
-        // if user_id already exists in rating table use PUT method
-
-        // get the logged user id
-
-        $sqlPOST = 'INSERT INTO rating (rating_id, movie_id, user_id, rating) VALUES (NULL, :movieId, :userId, :rating))';
-        $sqlGET = 'UPDATE rating SET rating = :rating WHERE user_id = :userId';
-
+        } catch (PDOException $e) {
+            echo '{"error":{"text":' . $e->getMessage() . '}}';
+        }
     }
 
     /**
